@@ -1,0 +1,78 @@
+docker run -d --name rancher --privileged --restart=unless-stopped -p 80:80 -p 443:443 -v /root/cert/server.crt:/var/lib/rancher/etc/ssl/ca.crt rancher/rancher
+docker run -d --name rancher --privileged --restart=unless-stopped -p 8080:8080 -v /root/cert/server.crt:/var/lib/rancher/etc/ssl/ca.crt rancher/server
+
+sudo docker run -d --privileged --restart=unless-stopped --net=host -v /etc/kubernetes:/etc/kubernetes -v /var/run:/var/run rancher/rancher-agent:v2.5.5 --server https://192.168.1.152 --token cph2nhh9crb6nf79ld9hv5nlrpppf6bxb7cvbpgj2t4kts42jkzcxf --ca-checksum e942c9a02a77448aef9c8a8db7ce3fbb35bea034fc9a0765ffa9c9c4dee6f7ab --worker
+
+rancher.10.46.226.69.xip.io
+
+master.192.168.126.130.xip.io
+
+docker run --rm -p 2181:2181 -p 3030:3030 -p 8081-8083:8081-8083 -p 9581-9585:9581-9585 -p 9092:9092 -e ADV_HOST=127.0.0.1 lensesio/fast-data-dev:latest
+
+
+
+master.rancher 192.168.1.147
+cluster.rancher 192.168.1.148
+
+admin / admin
+
+
+visudo -f /etc/sudoers
+sudo -s
+
+
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+firewall-cmd --permanent --add-port=30000-32767/tcp
+firewall-cmd --reload
+
+hostnamectl set-hostname master.gwangsoo.com
+
+vi /etc/hosts
+reboot --reboot
+
+
+첫 번째 서버 노드
+hostname -b master.gwangsoo.com
+/etc/rancher/rke2/config.yaml
+token: my-shared-secret
+tls-san:
+  - https://master.gwangsoo.com
+  - master.gwangsoo.com
+
+  
+
+curl -sfL https://get.rancher.io | sh -
+
+rancherd --help
+
+systemctl enable rancherd-server.service
+systemctl start rancherd-server.service
+
+journalctl -eu rancherd-server -f
+
+이건 삭제
+./usr/local/bin/rancherd-uninstall.sh
+
+
+
+kubectl을 사용하여 kubeconfig 파일 설정
+vi ~/.bash_profile
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml PATH=$PATH:/var/lib/rancher/rke2/bin
+
+kubectl get daemonset rancher -n cattle-system
+kubectl get pod -n cattle-system
+
+쿠버네티스 디폴트네임스페이스 스위칭
+kubectl config set-context --current --namespace=kube-system
+
+# 비번초기화
+rancherd reset-admin
+
+kubectl get all -A
+
+kubectl --kubeconfig kube_config_rancher-cluster.yml get ingress -n cattle-system -o wide
+kubectl --kubeconfig kube_config_rancher-cluster.yml logs -l app=ingress-nginx -n ingress-nginx
+
+
+kubectl logs -f service/rancher -n cattle-system
