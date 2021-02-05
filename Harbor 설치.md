@@ -1,5 +1,9 @@
 # 하버설치
-- https://goharbor.io/docs/1.10/install-config/
+## 참고 사이즈
+- official
+https://goharbor.io/docs/1.10/install-config/
+- blog
+https://waspro.tistory.com/630
 
 ## 설치준비
 
