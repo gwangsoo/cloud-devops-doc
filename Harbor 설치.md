@@ -90,16 +90,77 @@ sudo curl -L "https://github.com/goharbor/harbor/releases/download/v2.1.3/harbor
 
 - tar 추출
 ```bash
-bash $ tar xvf harbor-offline-installer-v2.1.3.tgz
+tar xvf harbor-offline-installer-v2.1.3.tgz
 ```
 
 ## Https access 구성
+https://goharbor.io/docs/1.10/install-config/configure-https/
 
 ## Harbor YML 구성
+https://goharbor.io/docs/1.10/install-config/configure-yml-file/
+
+- hostname ip주소 설정 (127.0.0.1) 로 설정하면 안됨
+- https 사용하지 않을 경우 주석(#) 처리
+
+```bash
+cp harbor.yml.tmpl harbor.yml
+
+vi harbor.yml
+
+hostname: 192.168.1.156
+
+# https related config
+#https:
+#  # https port for harbor, default is 443
+#  port: 443
+#  # The path of cert and key files for nginx
+#  certificate: /your/certificate/path
+#  private_key: /your/private/key/path
+```
 
 ## 설치 스크립트 실행
+https://goharbor.io/docs/1.10/install-config/run-installer-script/
+
+### install
+```bash
+sudo ./install.sh --with-clair --with-chartmuseum
+```
+
+### 실행확인
+```bash
+sudo docker ps -a
+```
+
+### 로그확인
+```bash
+sudo tail -f /var/log/harbor/*.log
+```
+
+## 변경사항 적용
+
+- stop
+```bash
+docker-compose down -v
+```
+
+- harbor.yml 수정
+```bash
+vi harbor.yml
+```
+
+- prepare 로 적용
+```bash
+sudo ./prepare --with-clair --with-chartmuseum
+```
+
+- start
+```bash
+sudo docker-compose up -d
+```
+
+## 서비스접속
+- 초기비밀번호 (harbor.yml 에 정의되어 있음)
+admin / Harbor12345
 
 ## 설치 실패시 문제해결
 - https://goharbor.io/docs/1.10/install-config/troubleshoot-installation/
-
-
