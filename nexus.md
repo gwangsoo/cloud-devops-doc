@@ -37,3 +37,8 @@ sudo firewall-cmd --reload
 ```bash
 http://192.168.1.160:8081/nexus
 ```
+
+## 로그인 비밀번호
+초기비밀번호 admin / admin1234
+
+
