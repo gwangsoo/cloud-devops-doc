@@ -38,6 +38,15 @@ sudo firewall-cmd --permanent --add-port=8081/tcp
 sudo firewall-cmd --reload
 ```
 
+## file descriptor 제한수 수정
+```bash
+ulimit -a | grep 'open files'
+
+sudo vim /etc/security/limits.conf
+
+admin - nofile 65536
+```
+
 ### 홈페이지 접속 확인
 ```bash
 http://192.168.1.160:8081/nexus
