@@ -85,6 +85,7 @@ Rancher는 데몬 셋으로 실행되기 때문에 추가 한 노드에서 자�
 ### 새 노드에서 고정 등록 주소 구성
 server및 token매개 변수를 지정해야한다는 점을 제외하면 추가 서버 노드는 첫 번째와 매우 유사하게 시작
 ```bash
+mkdir -p /etc/rancher/rke2
 vi /etc/rancher/rke2/config.yaml
 
 server: https://my-fixed-registration-address.com:9345
