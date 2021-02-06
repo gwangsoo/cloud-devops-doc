@@ -11,6 +11,8 @@ https://rancher.com/docs/rancher/v2.x/en/installation/install-rancher-on-linux
 ### root 로 설치
 ```bash
 sudo -s
+or
+su
 ```
 
 ## 구성 설정
@@ -39,26 +41,27 @@ NAME:
 
 ### RancherD를 시작
 ```bash
-sudo systemctl enable rancherd-server.service
-sudo systemctl start rancherd-server.service
+systemctl enable rancherd-server.service
+systemctl start rancherd-server.service
 ```
 
 ### 설치로그 확인
 RancherD가 시작되면 RKE2 Kubernetes 클러스터를 설치됨.
 다음 명령어를 사용하여 Kubernetes 클러스터가 표시되면 로그를 확인.
 ```bash
-sudo journalctl -eu rancherd-server -f
+journalctl -eu rancherd-server -f
 ```
 
 ## kubectl을 사용하여 kubeconfig 파일 설정
 Kubernetes 클러스터가 설정되면 RancherD의 kubeconfig 파일을 설정하고 kubectl다음을 수행하십시오.
 ```bash
+vi ~/.bash_profile
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml PATH=$PATH:/var/lib/rancher/rke2/bin
-kubectl get all -A
 ```
 
 ## Rancher가 Kubernetes 클러스터에 설치되어 있는지 확인
 ```bash
+kubectl get all -A
 kubectl get daemonset rancher -n cattle-system
 kubectl get pod -n cattle-system
 ```
