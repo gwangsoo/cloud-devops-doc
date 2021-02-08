@@ -96,7 +96,7 @@ yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce
 
 - 도커 패키지 설치
 ```bash
-yum update -y && yum install -y docker-ce-18.06.2.ce
+yum update -y && yum install -y docker-ce
 ```
 ```bash
 mkdir /etc/docker
