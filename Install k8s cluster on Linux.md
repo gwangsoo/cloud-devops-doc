@@ -58,6 +58,11 @@ cat << EOF >> /etc/hosts
 EOF
 ```
 
+- Host name 변경
+```bash
+hostnamectl set-hostname noded.ivycomtech.cloud
+```
+
 ## K8s 
 - K8s yum repo 추가
 ```bash
