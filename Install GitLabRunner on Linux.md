@@ -1,16 +1,23 @@
-centos7 GitLabRunner ¼³Ä¡
+# Install GitLabRunner on Linux(CentOS7)
 https://docs.gitlab.com/runner/install/
 
-# ¼³Ä¡µÈ git ¹öÀü È®ÀÎ
+## Gitì„¤ì¹˜
+
+- ì„¤ì¹˜ëœ git ë²„ì „ í™•ì¸
+```bash
 git --version
+```
 
-# git ¼³Ä¡
+- git ì„¤ì¹˜
+```bash
 sudo yum install git
+```
 
-# docker ¼³Ä¡
-# https://docs.docker.com/engine/install/centos/
+## docker ì„¤ì¹˜
+https://docs.docker.com/engine/install/centos/
 
-# Uninstall old versions
+- Uninstall old versions
+```bash
 sudo yum remove docker \
                 docker-client \
                 docker-client-latest \
@@ -19,38 +26,60 @@ sudo yum remove docker \
                 docker-latest-logrotate \
                 docker-logrotate \
                 docker-engine
+```
 
+- yum-utils ì„¤ì¹˜
+```bash
 sudo yum install -y yum-utils
+```
 
+- docker repository ë“±ë¡
+```bash
 sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
+```
 
-# µµÄ¿·¹Æ÷ÁöÅä¸® È°¼ºÈ­    
+- docker repository í™œì„±í™”
+```bash
 sudo yum-config-manager --enable docker-ce-nightly docker-ce-test
+```
 
-# µµÄ¿·¹Æ÷ÁöÅä¸® ºñÈ°¼ºÈ­ (¼³Ä¡¶§ ¾È¾¸)
-# sudo yum-config-manager --disable docker-ce-nightly
+- docker repository ë¹„í™œì„±í™” (ì„¤ì¹˜ë•ŒëŠ” ì‚¬ìš©í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.)
+```bash
+sudo yum-config-manager --disable docker-ce-nightly
+```
 
-# µµÄ¿¿£Áø ¼³Ä¡
+- docker ì„¤ì¹˜
+```bash
 sudo yum install docker-ce docker-ce-cli containerd.io
+```
 
-# µµÄ¿¿£Áö ¼³Ä¡ È®ÀÎ
+- docker ì„¤ì¹˜ í™•ì¸
+```bash
 yum list docker-ce --showduplicates | sort -r
+```
 
-# µµÄ¿½ÃÀÛ
+- docker ì„œë¹„ìŠ¤ ì‹œì‘ ë° ì¢…ë£Œ
+```bash
 sudo systemctl start docker
+sudo systemctl stop docker
+```
 
+## GitLab Runner ì„¤ì¹˜
 
-# GitLab Runner ¼³Ä¡
-
-# GitLab ÀúÀå¼Ò Ãß°¡
+- GitLab ì €ì¥ì†Œ ì¶”ê°€
+```bash
 curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash
+```
 
-# ÃÖ½Å¹öÀü GitLab Runner ¼³Ä¡
+- ìµœì‹ ë²„ì „ GitLab Runner ì„¤ì¹˜
+```bash
 export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
+```
 
-# Runner µî·Ï
+- GitLab Runner ë“±ë¡
+```bash
 sudo gitlab-runner register
 
 [admin@runner ~]$ sudo gitlab-runner register
@@ -69,5 +98,6 @@ Registering runner... succeeded                     runner=p4vx_oqp
 Enter an executor: docker-ssh+machine, custom, docker, docker-ssh, virtualbox, docker+machine, parallels, shell, ssh, kubernetes:
 shell
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+```
 
 https://runner.ivycomtech.cloud/
