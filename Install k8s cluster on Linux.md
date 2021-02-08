@@ -133,7 +133,7 @@ systemctl enable kubelet && systemctl start kubelet
 ### master node
 - K8s 초기화 명령 실행
 ```bash
-kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.164
+kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.163
 ```
 
   - 초기화 후 다시 설치해야 하는 경우
@@ -151,14 +151,18 @@ To start using your cluster, you need to run the following as a regular user:
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 192.168.1.164:6443 --token 2eq1j8.5apqanulzwgm0pwp \
-    --discovery-token-ca-cert-hash sha256:a2504fb2a234f59d51dfa988a30240ddb0fe4f31decc63893aeacee3f0878f55
+kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
+    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
 ```
 
 - 환경 변수 설정
@@ -179,8 +183,8 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc
 ### worker node
 - Master Init 후 복사 했었던 내용 붙여넣기
 ```bash
-kubeadm join 192.168.1.164:6443 --token 2eq1j8.5apqanulzwgm0pwp \
-    --discovery-token-ca-cert-hash sha256:a2504fb2a234f59d51dfa988a30240ddb0fe4f31decc63893aeacee3f0878f55
+kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
+    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
 ```
 
 - Node 연결 확인
