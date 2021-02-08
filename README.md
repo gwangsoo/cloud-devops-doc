@@ -12,10 +12,11 @@ cloud 관련 설치 가이드 및 CI/CD 환경 구성 가이드
 - 192.168.1.162 kubernetes node a
 - 192.168.1.163 kubernetes node a
 - 192.168.1.164 kubernetes node a
+- 192.168.1.165 rancher2
 
 ## host 등록
 ```bash
-sudo vi /etc/hosts
+sudo cat << EOF >> /etc/hosts
 192.168.1.155 runner.ivycomtech.cloud
 192.168.1.156 harbor.ivycomtech.cloud
 192.168.1.157 rancher.ivycomtech.cloud
@@ -25,6 +26,8 @@ sudo vi /etc/hosts
 192.168.1.162 nodeb.ivycomtech.cloud
 192.168.1.163 nodec.ivycomtech.cloud
 192.168.1.164 noded.ivycomtech.cloud
+192.168.1.165 rancher2.ivycomtech.cloud
+EOF
 ```
 
 ## hostname 변경
