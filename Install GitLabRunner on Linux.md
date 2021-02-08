@@ -13,7 +13,7 @@ git --version
 sudo yum install git
 ```
 
-## docker 설치
+## Docker 설치
 https://docs.docker.com/engine/install/centos/
 
 - Uninstall old versions
@@ -33,34 +33,34 @@ sudo yum remove docker \
 sudo yum install -y yum-utils
 ```
 
-- docker repository 등록
+- Docker Repository 등록
 ```bash
 sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
 ```
 
-- docker repository 활성화
+- Docker Repository 활성화
 ```bash
 sudo yum-config-manager --enable docker-ce-nightly docker-ce-test
 ```
 
-- docker repository 비활성화 (설치때는 사용하지 않습니다.)
+- Docker Repository 비활성화 (설치때는 사용하지 않습니다.)
 ```bash
 sudo yum-config-manager --disable docker-ce-nightly
 ```
 
-- docker 설치
+- Docker 설치
 ```bash
 sudo yum install docker-ce docker-ce-cli containerd.io
 ```
 
-- docker 설치 확인
+- Docker 설치 확인
 ```bash
 yum list docker-ce --showduplicates | sort -r
 ```
 
-- docker 서비스 시작 및 종료
+- Docker 서비스 시작 및 종료
 ```bash
 sudo systemctl start docker
 sudo systemctl stop docker
