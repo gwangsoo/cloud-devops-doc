@@ -1,4 +1,4 @@
-# 하버설치
+# Install Harbor on Linux(CentOS7) 
 ## 참고 사이즈
 - official
 https://goharbor.io/docs/1.10/install-config/
