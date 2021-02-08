@@ -1,13 +1,13 @@
-centos7 gitlab ��ġ
+centos7 gitlab 설치
 https://about.gitlab.com/install/#centos-7?version=ce
 
-# ��ġ�� git ���� Ȯ��
+# 설치된 git 버전 확인
 git --version
 
-# git ��ġ
+# git 설치
 yum install git
 
-# git lab ��ġ�� �ʿ��� ������ ��ġ
+# git lab 설치전 필요한 의존성 설치
 # https://about.gitlab.com/installation/#centos
 
 sudo yum install -y curl policycoreutils-python openssh-server perl
@@ -17,12 +17,12 @@ sudo firewall-cmd --permanent --add-service=http
 sudo firewall-cmd --permanent --add-service=https
 sudo systemctl reload firewalld
 
-# Postfix�� ��ġ�Ͽ� �˸� �̸���
+# Postfix를 설치하여 알림 이메일
 sudo yum install postfix
 sudo systemctl enable postfix
 sudo systemctl start postfix
 
-# git lab ��ġ
+# git lab 설치
 curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
 
 sudo EXTERNAL_URL="https://gitlab.ivycomtech.cloud" yum install -y gitlab-ce
@@ -35,15 +35,44 @@ configuration in /etc/gitlab/gitlab.rb file.
 Then, you can start your GitLab instance by running the following command:
   sudo gitlab-ctl reconfigure
 
-# ó�� �����ϸ� root ���� ��� ����
+# 처음 접속하면 root 계정 비번 설정
 https://gitlab.ivycomtech.cloud
 
-root / �����Ѻ�й�ȣ
+root / 지정한비밀번호
 
 sudo systemctl enable gitlab-runsvdir.service
 sudo systemctl status gitlab-runsvdir.service
 sudo systemctl start gitlab-runsvdir.service
 sudo systemctl stop gitlab-runsvdir.service
+
+# 비밀번호 재설정
+- 일반계정
+sudo gitlab-rake "gitlab:password:reset[계정]"
+
+- root계정
+Rails 콘솔 시작
+sudo gitlab-rails console -e production
+
+사용자 ID 또는 이메일 ID로 사용자를 찾으십시오.
+user = User.find(123)
+or
+user = User.find_by(email: 'user@example.com')
+or
+user = User.where("username = 'root'")
+or
+user = User.find(1)
+
+비밀번호 재설정
+user.password='new_password'
+user.password_confirmation='new_password'
+
+GitLab은 사용자가 비밀번호를 변경했음을 알리는 이메일
+user.send_only_admin_changed_your_password_notification!
+
+변경 사항을 저장
+user.save!
+
+변경한 암호인 new_password 로 로그인한다
 
 
 --------------------------------------------------------------------------------------------------------------------------
