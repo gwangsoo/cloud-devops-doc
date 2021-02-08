@@ -131,6 +131,11 @@ systemctl enable kubelet && systemctl start kubelet
 kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.164
 ```
 
+  - 초기화 후 다시 설치해야 하는 경우
+  ```bash
+  kubeadm reset
+  ```
+
 - 실행 후 [Your Kubernetes master has initialized successfully!] 문구를 확인하고 아래 내용 복사해서 별도로 저장
 ```bash
 Your Kubernetes control-plane has initialized successfully!
