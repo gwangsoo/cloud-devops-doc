@@ -46,7 +46,7 @@ echo "net.bridge.bridge-nf-call-iptables=1" > /etc/sysctl.d/k8s.conf
 ```
 
 - swap 비활성화
-- swap이 활성화 되어 있으면 Kubelet 이 실행되지 않음
+  - swap이 활성화 되어 있으면 Kubelet 이 실행되지 않음
 ```bash
 swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
 ```
