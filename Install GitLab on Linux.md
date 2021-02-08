@@ -1,4 +1,4 @@
-# nstall GiyLab on Linux (CentOS7)
+# nstall GitLab on Linux (CentOS7)
 https://about.gitlab.com/install/#centos-7?version=ce
 
 ## 설치 준비
