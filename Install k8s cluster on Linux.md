@@ -42,13 +42,19 @@ sysctl --system
 swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
 ```
 
-- hosts 등록
+- Hosts 등록
 ```bash
 cat << EOF >> /etc/hosts
-192.168.1.161 nodea
-192.168.1.162 nodeb
-192.168.1.163 nodec
-192.168.1.164 noded
+192.168.1.155 runner.ivycomtech.cloud
+192.168.1.156 harbor.ivycomtech.cloud
+192.168.1.157 rancher.ivycomtech.cloud
+192.168.1.158 gitlab.ivycomtech.cloud
+192.168.1.160 nexus.ivycomtech.cloud
+192.168.1.161 nodea.ivycomtech.cloud
+192.168.1.162 nodeb.ivycomtech.cloud
+192.168.1.163 nodec.ivycomtech.cloud
+192.168.1.164 noded.ivycomtech.cloud
+192.168.1.165 rancher2.ivycomtech.cloud
 EOF
 ```
 
@@ -67,14 +73,126 @@ gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
 EOF
 ```
 
+- Centos Update
+```bash
+yum update -y
+```
+
+### docker 설치
+- 도커 설치 전에 필요한 패키지 설치
+```bash
+yum install -y yum-utils device-mapper-persistent-data lvm2
+```
+
+- 도커 설치를 위한 저장소 를 설정
+```bash
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+```
+
+- 도커 패키지 설치
+```bash
+yum update -y && yum install -y docker-ce-18.06.2.ce
+```
+```bash
+mkdir /etc/docker
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2",
+  "storage-opts": [
+    "overlay2.override_kernel_check=true"
+  ]
+}
+EOF
+
+mkdir -p /etc/systemd/system/docker.service.d
+```
+
+### K8s 설치
 - K8s 설치
 ```bash
-yum install -y docker kubelet kubeadm kubectl kubernetes-cni
+~~yum install -y docker kubelet kubeadm kubectl kubernetes-cni~~
+yum install -y --disableexcludes=kubernetes kubeadm-1.15.5-0.x86_64 kubectl-1.15.5-0.x86_64 kubelet-1.15.5-0.x86_64
 ```
 
 - 실행
 ```bash
+systemctl daemon-reload
 systemctl enable docker && systemctl start docker
 systemctl enable kubelet && systemctl start kubelet
 ```
+
+### master node
+- K8s 초기화 명령 실행
+```bash
+kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.164
+```
+
+- 실행 후 [Your Kubernetes master has initialized successfully!] 문구를 확인하고 아래 내용 복사해서 별도로 저장
+```bash
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.1.164:6443 --token 2eq1j8.5apqanulzwgm0pwp \
+    --discovery-token-ca-cert-hash sha256:a2504fb2a234f59d51dfa988a30240ddb0fe4f31decc63893aeacee3f0878f55
+```
+
+- 환경 변수 설정
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+- Kubectl 자동완성 기능 설치
+  - kubectl 사용시 [tab] 버튼을 이용해서 다음에 올 명령어 리스트를 조회
+```bash
+yum install bash-completion -y
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+```
+
+### worker node
+- Master Init 후 복사 했었던 내용 붙여넣기
+```bash
+kubeadm join 192.168.1.164:6443 --token 2eq1j8.5apqanulzwgm0pwp \
+    --discovery-token-ca-cert-hash sha256:a2504fb2a234f59d51dfa988a30240ddb0fe4f31decc63893aeacee3f0878f55
+```
+
+- Node 연결 확인
+  - Master 서버에 접속해서 아래 명령 입력 후 추가된 Node가 보이는지 확인 (Status는 NotReady)
+```bash
+kubectl get nodes
+```
+
+## Networking
+
+### Calico 설치
+- Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
+```bash
+curl -O https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+sed s/192.168.0.0\\/16/20.96.0.0\\/12/g -i calico.yaml
+kubectl apply -f calico.yaml
+```
+
+- calico와 coredns 관련 Pod의 Status가 Running인지 확인 (2분정도 소요)
+```bash
+kubectl get pods --all-namespaces
+```
+
 
