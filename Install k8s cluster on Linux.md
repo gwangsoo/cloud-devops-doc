@@ -208,4 +208,29 @@ kubectl apply -f calico.yaml
 kubectl get pods --all-namespaces
 ```
 
+## Etc
 
+### Componentstatuses Unhealthy (컴포넌트 상태가 unhealty 로 확인되는 경우)
+- ComponentStatus 는 v1.19 부터 deprecated 되어서, controller-manager와 scheduler 와 포트가 변경된 사항을 더이상 반영하지 못함.
+```bash
+kubectl get cs
+
+Warning: v1 ComponentStatus is deprecated in v1.19+
+NAME                 STATUS      MESSAGE                                                                                       ERROR
+controller-manager   Unhealthy   Get "http://127.0.0.1:10252/healthz": dial tcp 127.0.0.1:10252: connect: connection refused
+scheduler            Unhealthy   Get "http://127.0.0.1:10251/healthz": dial tcp 127.0.0.1:10251: connect: connection refused
+etcd-0               Healthy     {"health":"true"}
+```
+- 해결방법
+  - 아래 yaml 파일에서 다음 부분을 주석으로 처리합니다.
+  ```bash
+      - --port=0
+  ```
+  ```bash
+      #- --port=0
+  ```
+  ```bash
+  sudo vi /etc/kubernetes/manifests/kube-controller-manager.yaml
+  sudo vi /etc/kubernetes/manifests/kube-scheduler.yaml
+  sudo systemctl restart kubelet.service
+  ```
