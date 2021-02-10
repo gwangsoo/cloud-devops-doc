@@ -120,7 +120,7 @@ mkdir -p /etc/systemd/system/docker.service.d
 ### K8s 설치
 - K8s 설치
 ```bash
-yum install -y --disableexcludes=kubernetes kubeadm kubectl kubelet
+yum install -y --disableexcludes=kubernetes kubeadm kubectl kubelet kubernetes-cni
 ```
 
 - 실행
