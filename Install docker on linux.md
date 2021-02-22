@@ -49,3 +49,8 @@ yum list docker-ce --showduplicates | sort -r
 ```bash
 sudo systemctl start docker
 ```
+
+## 엄청 쉬운 또 다른 방법
+```bash
+curl https://releases.rancher.com/install-docker/19.03.sh | sh
+```
