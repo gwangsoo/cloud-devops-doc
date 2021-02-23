@@ -1,6 +1,15 @@
 # 최신버전 docker 설치
 https://docs.docker.com/engine/install/centos/
 
+## 설치된 docker version 확인
+```bash
+docker version
+or
+docker --version
+or
+yum list installed | grep docker
+```
+
 ## Uninstall old versions
 ```bash
 sudo yum remove docker \
@@ -36,11 +45,23 @@ sudo yum-config-manager --disable docker-ce-nightly
 ```
 
 ## 도커엔진 설치
+
+### 최신버전 설치
 ```bash
 sudo yum install docker-ce docker-ce-cli containerd.io
 ```
 
-## 도커엔지 설치 확인
+### 버전 선택 설치
+- 버전 확인
+```bash
+sudo yum list docker-ce --showduplicates
+```
+- 특정버전 설치
+```bash
+sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+```
+
+## 도커엔진 설치 확인
 ```bash
 yum list docker-ce --showduplicates | sort -r
 ```
