@@ -29,6 +29,16 @@ yum remove 지우려는패키지
 ### CentOS7 준비
 ### Docker 설치
 ### Kubernetes 설치
+- install
 ```bash
 yum install -y kubectl-1.17.4-0 kubelet-1.17.4-0 kubeadm-1.17.4-0
+```
+- run
+```bash
+systemctl daemon-reload
+systemctl enable kubelet && systemctl start kubelet
+```
+- init
+```bash
+kubeadm init --apiserver-advertise-address=192.168.1.165
 ```
