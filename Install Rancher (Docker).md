@@ -44,6 +44,16 @@ https://rancher.com/docs/rancher/v2.x/en/installation/other-installation-methods
 #### Bind-Mounted Volume for Persistent Data
 Rancher는 영구 데이터에 대한 Docker 볼륨을 생성하고 컨테이너 내부의 /var/lib/rancher 에 마운트합니다. 원하는 경우 호스트에서이 위치로 디렉토리를 대신 바인딩 할 수 있습니다. 바인드 마운트 된 디렉토리를 사용하면 Docker 볼륨을 사용할 때보 다 백업 및 복원이 더 쉽습니다.
 
+## Sample
+```bash
+docker run -d --restart=unless-stopped -p 80:80 -p 443:443 -v /opt/rancher:/var/lib/rancher rancher/rancher:v2.4.1
+Unable to find image 'rancher/rancher:v2.4.1' locally
+v2.4.1: Pulling from rancher/rancher
+5bed26d33875: …
+Digest: sha256:7796eb2a851ad00509052d012afa5e8f74c9e84da51c798f14850e0255160558
+Status: Downloaded newer image for rancher/rancher:v2.4.1 430a461add079f67ed549b83b48a79244e9bce925ee0d9bce5bc8730a413898f
+```
+
 ## References
 - Single-node Docker Installation
   - https://rancher.com/docs/rancher/v2.x/en/installation/otherinstallation-methods/single-node-docker/
