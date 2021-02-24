@@ -30,5 +30,5 @@ yum remove 지우려는패키지
 ### Docker 설치
 ### Kubernetes 설치
 ```bash
-yum install -y ectl-1.17.4-0 kubelet-1.17.4-0 kubeadm-1.17.4-0
+yum install -y kubectl-1.17.4-0 kubelet-1.17.4-0 kubeadm-1.17.4-0
 ```
