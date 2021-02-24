@@ -35,7 +35,7 @@ Rancher 서버에 대한 액세스를 보호하는 방법에는 네 가지 옵�
 #### Auto-Generated Let's Encrypt Certificate
 Rancher는 http-01 challenge format을 통해 Let's Encrypt에서 직접 인증서를 요청할 수 있습니다. 이것은 Rancher 서버에 직접, 포트 포워딩을 통해 또는 공용로드 밸런서를 통해 인터넷에서 연결할 수있는 환경에서 작동합니다.
 Rancher 서버에는 Rancher 서버 호스트의 IP를 가리키는 DNS 이름이 있어야하며 포트 80에서 도달 할 수 있어야합니다. 문제는 어디에서나 올 수 있으므로 포트 80은 전 세계에 공개되어야합니다.
-Let's Encrypt에서 인증서 요청을 시작하려면 Rancher 서버 컨테이너에 대한 시작 옵션으로 --acmedomain을 제공합니다.
+Let's Encrypt에서 인증서 요청을 시작하려면 Rancher 서버 컨테이너에 대한 시작 옵션으로 --acme-domain을 제공합니다.
 이것은 Docker에 대한 플래그가 아니므로 이미지 뒤에 배치하면 플래그가 Rancher 서버 컨테이너 진입 점으로 전달되고 Rancher가 요청을합니다.
 
 ### Advanced Options
