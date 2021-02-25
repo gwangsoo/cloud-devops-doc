@@ -1,7 +1,40 @@
 # Install rke on linux
 
 ## rke
+- Rancher Kubernetes Engine (RKE)은 Docker 컨테이너 내에서 완전히 실행되는 CNCF 인증 Kubernetes 배포입니다.
+- 베어 메탈 및 가상화 된 서버에서 작동합니다.
+- RKE는 Kubernetes 커뮤니티의 일반적인 문제인 설치 복잡성 문제를 해결합니다.
+- RKE를 사용하면 Kubernetes의 설치 및 운영이 단순화되고 쉽게 자동화되며 실행중인 운영 체제 및 플랫폼과 완전히 독립적입니다.
+- 지원되는 Docker 버전을 실행할 수있는 한 RKE로 Kubernetes를 배포하고 실행할 수 있습니다.
+
+### 설치전 요구사항
+- Operating System
+  - General Linux Requirements
+  - OS별 요구사항
+- Software
+  - Docker
+  - Kubernetes
+- Port
+  - Opening port TCP/6443 using iptables
+  - Opening port TCP/6443 using firewalld
+- SSH 설정
+- more information : https://rancher.com/docs/rke/latest/en/os/
+
+### Latest RKE download
+- ref url
+  - https://github.com/rancher/rke/releases/tag/v1.1.0
+  - https://rancher.com/docs/rke/latest/en/
+- downlaod
+```bash
+wget https://github.com/rancher/rke/releases/download/v1.1.0/rke_linux-amd64
+```
+
 ### config 생성
+- SSH Private Key Path(~/.ssh/id_rsa)에 파일이 없는 경우 생성해야 함.
+```bash
+ssh-keygen
+```
+- config 로 cluster.yml 생성
 ```bash
 [root@rancher2 rke]# ./rke config
 [+] Cluster Level SSH Private Key Path [~/.ssh/id_rsa]:
