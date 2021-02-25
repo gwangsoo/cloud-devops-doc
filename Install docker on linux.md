@@ -72,6 +72,19 @@ sudo systemctl start docker
 ```
 
 ## 엄청 쉬운 또 다른 방법
+- 19.03.15
 ```bash
-curl https://releases.rancher.com/install-docker/19.03.sh | sh
+curl https://releases.rancher.com/install-docker/19.03.15.sh | sh
+```
+- 18.09.2
+```bash
+curl https://releases.rancher.com/install-docker/18.09.2.sh | sh
+```
+- 18.06.2
+```bash
+curl https://releases.rancher.com/install-docker/18.06.2.sh | sh
+```
+- 17.03.2
+```bash
+curl https://releases.rancher.com/install-docker/17.03.2.sh | sh
 ```
