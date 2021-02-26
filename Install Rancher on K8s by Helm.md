@@ -139,6 +139,18 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
   - fatal: unable to access 'https://git.rancher.io/charts/': Could not resolve host: git.rancher.io
     - rancher가 호환되는 docker 버전이 아니면 docker 재설치
     - https://rancher.com/support-maintenance-terms/
+    ```bash
+    systemctl stop docker && systemctl disable docker
+    
+    yum list installed | grep docker
+    
+    yum update docker-ce-19.03.15 docker-ce-cli-19.03.15
+    or
+    yum erase -y docker-ce docker-ce-cli
+    yum install -y docker-ce-19.03.15 docker-ce-cli-19.03.15
+    
+    systemctl enable docker && systemctl start docker
+    ```
 
 ### Nodeport 서비스 추가
 ```bash
