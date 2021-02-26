@@ -142,7 +142,7 @@ systemctl enable kubelet && systemctl start kubelet
     - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
     - upload-certs: 인증서가 자동 배포
     ```bash
-    kubeadm init --control-plane-endpoint "192.168.1.161:26443" \
+    kubeadm init --control-plane-endpoint "192.168.1.157:26443" \
                  --upload-certs \
                  --pod-network-cidr "20.96.0.0/12"
                  --apiserver-advertise-address=192.168.1.157
@@ -190,6 +190,40 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 yum install bash-completion -y
 source <(kubectl completion bash)
 echo "source <(kubectl completion bash)" >> ~/.bashrc
+```
+
+### master node HA 구성
+- master node를 복수개 연결하여 HA 구성합니다.
+- 외부에 HAProxy 및 Keepalived 설정하거나, master node 에 구성할 수도 있습니다.
+- Kubernetes 공시 가이드에도 HAProxy 를 구성을 가이드 하고 있습니다.
+- HAProxy 구성 방법
+  - node1 IP의 26443포트로 전달받은 데이터를 node1 ~ node3의 6443 포트로 포워드 시켜줍니다. 라운드로빈으로 순차적으로 접근하도록 하겠습니다.
+```bash
+$ sudo cat <<EOF >> /etc/haproxy/haproxy.cfg
+frontend kubernetes-master-lb
+bind 0.0.0.0:26443
+option tcplog
+mode tcp
+default_backend kubernetes-master-nodes
+
+backend kubernetes-master-nodes
+mode tcp
+balance roundrobin
+option tcp-check
+option tcplog
+server rancher 192.168.1.157:6443 check
+server rancher2 192.168.1.165:6443 check
+EOF
+
+$ sudo systemctl restart haproxy
+$ sudo systemctl status haproxy
+```
+
+### master node 연결
+- Master Init 후 복사 했었던 내용 붙여넣기
+```bash
+kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
+    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
 ```
 
 ### worker node
