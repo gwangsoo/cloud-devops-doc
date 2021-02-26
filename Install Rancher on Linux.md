@@ -73,7 +73,7 @@ rancherd reset-admin
 
 ## 제거
 ```bash
-rancherd-uninstall.sh
+/usr/local/bin/rancherd-uninstall.sh
 ```
 
 ## 고가용성
