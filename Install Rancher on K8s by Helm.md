@@ -166,6 +166,8 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
 - rancher uninstall
 ```bash
 helm uninstall rancher --namespace cattle-system
+
+kubectl -n cattle-system delete pods,daemonset,service,replicaset,deployment --all
 ```
 
 ### Nodeport 서비스 추가
