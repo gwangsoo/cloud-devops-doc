@@ -265,6 +265,11 @@ kubectl get pods --all-namespaces
 
 ## Etc
 
+### master node 에 pod 배포 가능하게 하기
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/master-
+```
+
 ### Componentstatuses Unhealthy (컴포넌트 상태가 unhealty 로 확인되는 경우)
 - ComponentStatus 는 v1.19 부터 deprecated 되어서, controller-manager와 scheduler 와 포트가 변경된 사항을 더이상 반영하지 못함.
 ```bash
