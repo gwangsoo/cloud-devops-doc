@@ -79,7 +79,7 @@ cert-manager-webhook-787858fcdb-nlzsq      1/1     Running   0          2m
 ```bash
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --set hostname=rancher.my.org
+  --set hostname=rancher.ivycomtech.cloud
 ```
 Rancher가 롤아웃 될때가지 대기
 ```bash
