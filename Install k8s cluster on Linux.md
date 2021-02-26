@@ -134,9 +134,19 @@ systemctl enable kubelet && systemctl start kubelet
 
 ### master node
 - K8s 초기화 명령 실행
-```bash
-kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.163
-```
+  - single node 생성
+    ```bash
+    kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.157
+    ```
+  - multi node 생성
+    - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
+    - upload-certs: 인증서가 자동 배포
+    ```bash
+    kubeadm init --control-plane-endpoint "192.168.1.161:26443" \
+                 --upload-certs \
+                 --pod-network-cidr "20.96.0.0/12"
+                 --apiserver-advertise-address=192.168.1.157
+    ```
 
   - 초기화 후 다시 설치해야 하는 경우
   ```bash
