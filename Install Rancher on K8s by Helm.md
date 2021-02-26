@@ -12,7 +12,7 @@ $ ./get_helm.sh
 ```
 or
 ```bash
-https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 ```
 
 ## 설치
