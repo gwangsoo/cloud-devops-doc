@@ -140,6 +140,10 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
     - rancher가 호환되는 docker 버전이 아니면 docker 재설치
     - https://rancher.com/support-maintenance-terms/
     ```bash
+    curl -fsSL https://get.docker.com | sh
+    ```
+    또는 docker 버전 수정
+    ```bash
     systemctl stop docker && systemctl disable docker
     
     yum list installed | grep docker
@@ -151,6 +155,7 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
     
     systemctl enable docker && systemctl start docker
     ```
+    또는 k8s 버전 수정
     ```bash
     yum list installed | grep kubelet
     
