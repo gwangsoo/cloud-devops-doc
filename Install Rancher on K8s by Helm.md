@@ -119,17 +119,26 @@ helm install rancher rancher-latest/rancher \
 ```
 
 ### Verify that the Rancher Server is Successfully Deployed
+- 설치완료 대기
 ```bash
 kubectl -n cattle-system rollout status deploy/rancher
 Waiting for deployment "rancher" rollout to finish: 0 of 3 updated replicas are available...
 deployment "rancher" successfully rolled out
 ```
-설치 결과 확인
+- 설치 결과 확인
 ```bash
 kubectl -n cattle-system get deploy rancher
 NAME      DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 rancher   3         3         3            3           3m
 ```
+- 로그확인
+```bash
+kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
+```
+- 오류
+  - fatal: unable to access 'https://git.rancher.io/charts/': Could not resolve host: git.rancher.io
+    - rancher가 호환되는 docker 버전이 아니면 docker 재설치
+    - https://rancher.com/support-maintenance-terms/
 
 ### Nodeport 서비스 추가
 ```bash
