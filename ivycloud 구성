@@ -112,10 +112,18 @@ kubeadm join 192.168.1.161:26443 --token d4kakd.cf84pi81d59f3mte \
 kubectl taint nodes --all node-role.kubernetes.io/master-
 ```
 
-### 가상 네트워크(weave) 적용
+### 가상 네트워크 설치
 Calico, Canal, Clilum, Flannel, weave 등 다양한 가상네트워크.
 
--weave 적용
+-weave 설치
 ```bash
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+- Calico 설치
+  - Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
+```bash
+curl -O https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+sed s/192.168.0.0\\/16/20.96.0.0\\/12/g -i calico.yaml
+kubectl apply -f calico.yaml
 ```
