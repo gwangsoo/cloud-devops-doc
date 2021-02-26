@@ -151,6 +151,11 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
     
     systemctl enable docker && systemctl start docker
     ```
+    
+- rancher uninstall
+```bash
+helm uninstall rancher --namespace cattle-system
+```
 
 ### Nodeport 서비스 추가
 ```bash
