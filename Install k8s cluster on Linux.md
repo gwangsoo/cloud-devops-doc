@@ -140,7 +140,7 @@ systemctl enable kubelet && systemctl start kubelet
     ```
   - multi node 생성
     - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
-    - upload-certs: 인증서가 자동 배포
+    - upload-certs: master node에 인증서가 자동 배포 됨.
     ```bash
     kubeadm init --control-plane-endpoint "192.168.1.157:26443" \
                  --upload-certs \
@@ -153,8 +153,9 @@ systemctl enable kubelet && systemctl start kubelet
   kubeadm reset
   ```
 
-- 실행 후 [Your Kubernetes master has initialized successfully!] 문구를 확인하고 아래 내용 복사해서 별도로 저장
+- 실행 후 [Your Kubernetes master has initialized successfully!] 내용 별도로 저장
 ```bash
+cat <<EOF > k8s-install-result.txt
 Your Kubernetes control-plane has initialized successfully!
 
 To start using your cluster, you need to run the following as a regular user:
@@ -163,18 +164,25 @@ To start using your cluster, you need to run the following as a regular user:
   sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
   sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-Alternatively, if you are the root user, you can run:
-
-  export KUBECONFIG=/etc/kubernetes/admin.conf
-
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
 
+You can now join any number of the control-plane node running the following command on each as root:
+
+  kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
+    --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac \
+    --control-plane --certificate-key b78d7fd18125f61590cec56671b48f3af26f955735893d307b331c7b6d1cabb6
+
+Please note that the certificate-key gives access to cluster sensitive data, keep it secret!
+As a safeguard, uploaded-certs will be deleted in two hours; If necessary, you can use
+"kubeadm init phase upload-certs --upload-certs" to reload certs afterward.
+
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
-    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
+kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
+    --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac
+EOF
 ```
 
 - 환경 변수 설정
@@ -222,15 +230,16 @@ $ sudo systemctl status haproxy
 ### master node 연결
 - Master Init 후 복사 했었던 내용 붙여넣기
 ```bash
-kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
-    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
+kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
+    --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac \
+    --control-plane --certificate-key b78d7fd18125f61590cec56671b48f3af26f955735893d307b331c7b6d1cabb6
 ```
 
 ### worker node
 - Master Init 후 복사 했었던 내용 붙여넣기
 ```bash
-kubeadm join 192.168.1.163:6443 --token 34l4d8.o3n9vm17reh5fzou \
-    --discovery-token-ca-cert-hash sha256:21dd4fe87747d62e66b68c489f80580d7129e503c9ab71e148f3cca5b13d2bb5
+kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
+    --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac
 ```
 
 - Node 연결 확인
