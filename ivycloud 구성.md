@@ -1,4 +1,5 @@
 # Ivy cloud 구성
+https://danawalab.github.io/kubernetes/2020/01/28/kubernetes-ha-cluster.html
 
 ## 개요
 - 고가용성 K8s 구성을 목표로 합니다.
