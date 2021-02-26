@@ -152,8 +152,6 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
     systemctl enable docker && systemctl start docker
     ```
     ```bash
-    systemctl stop kubelet && systemctl disable kubelet
-    
     yum list installed | grep kubelet
     
     yum update -y --disableexcludes=kubernetes kubeadm-1.19.6-0 kubectl-1.19.6-0 kubelet-1.19.6-0 kubernetes-cni
@@ -161,7 +159,8 @@ kubectl -n cattle-system logs -f -lapp=rancher --all-containers=true
     yum erase -y kubeadm kubectl kubelet kubernetes-cni
     yum install -y --disableexcludes=kubernetes kubeadm-1.19.6-0 kubectl-1.19.6-0 kubelet-1.19.6-0 kubernetes-cni
     
-    systemctl enable kubelet && systemctl start kubelet
+    kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
+    --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac
     ```
     
 - rancher uninstall
