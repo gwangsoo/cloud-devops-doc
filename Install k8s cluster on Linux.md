@@ -144,7 +144,7 @@ systemctl enable kubelet && systemctl start kubelet
     ```bash
     kubeadm init --control-plane-endpoint "192.168.1.157:26443" \
                  --upload-certs \
-                 --pod-network-cidr "20.96.0.0/12"
+                 --pod-network-cidr "20.96.0.0/12" \
                  --apiserver-advertise-address=192.168.1.157
     ```
 
