@@ -42,7 +42,7 @@ server nodec 192.168.1.163:6443 check
 ### 클러스터 생성
 클러스터 생성할때 옵션
 - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
-- upload-certs: 인증서가 자동 배포
+- upload-certs: control plane 인스턴스에서 공유해야 하는 인증서를 업로드(자동배포), 수동으로 인증서를 복사할 경우는 이 옵션 생략
 
 ```bash
 kubeadm init --control-plane-endpoint "192.168.1.161:26443" \
@@ -95,6 +95,30 @@ kubeadm join 192.168.1.161:26443 --token d4kakd.cf84pi81d59f3mte \
 EOF
 ```
 
+#### 참고
+- certificate-key를 지정하여 나중에 조인에서 사용할 수 있음
+```bash
+shell> sudo kubeadm alpha certs certificate-key
+f8902e114ef118304e561c3ecd4d0b543adc226b7a07f675f56564185ffe0c07 
+```
+- join token 은 다시 확인할 수 있다.
+```bash
+kubeadm token create --print-join-command
+```
+- 인증서를 다시 업로드하고 새 암호 해독 키를 생성하려면 이미 클러스터에 연결된 control plane 노드에서 다음 명령을 사용
+```bash
+shell> sudo kubeadm init phase upload-certs --upload-certs
+W0322 16:20:40.631234  101997 validation.go:28] Cannot validate kube-proxy config - no validator is available
+W0322 16:20:40.631413  101997 validation.go:28] Cannot validate kubelet config - no validator is available
+[upload-certs] Storing the certificates in Secret "kubeadm-certs" in the "kube-system" Namespace
+[upload-certs] Using certificate key:
+7f97aaa65bfec1f039c4dbdf3a2073de853c708bd4d9ff9d72b776b0f9874c9d
+```
+- 클러스터를 control plane 조인(join)하는 데 필요한 전체 'kubeadm join' 플래그를 출력
+```bash
+shell> sudo kubeadm token create --print-join-command --certificate-key \ 7f97aaa65bfec1f039c4dbdf3a2073de853c708bd4d9ff9d72b776b0f9874c9d
+```
+
 ### 클러스터 연결
 노드1에서 클러스터 생성시 kubeadm join 명령어가 출력되는데 –control-plane –certificate-key 플래그 포함하여 명령어를 실행하면 마스터 노드로 연결이 되고, 플래그는 추가하지 않고 사용하게 되면 워커노드로 연결됩니다.
 
@@ -127,4 +151,10 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl versio
 curl -O https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 sed s/192.168.0.0\\/16/20.96.0.0\\/12/g -i calico.yaml
 kubectl apply -f calico.yaml
+```
+
+### worker node 제거
+```bash
+kubectl drain <worker node> --delete-local-data --force --ignore-daemonsets
+kubectl delete node/<worker node>
 ```
