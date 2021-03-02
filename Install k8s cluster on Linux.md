@@ -273,7 +273,7 @@ kubectl get nodes
 ```
 
 ## Networking
-
+K8s CNI 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni-providers-flannel-calico-canal-and-weave/
 ### Calico 설치
 - Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
 ```bash
@@ -287,9 +287,17 @@ kubectl apply -f calico.yaml
 kubectl get pods --all-namespaces
 ```
 
-### weave 설치
+### Weave 설치
+```bash
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
 
-### frannel 설치
+### Frannel 설치
+```bash
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
+
+### Canal 설치
 
 ## Etc
 
