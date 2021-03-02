@@ -140,7 +140,7 @@ systemctl enable kubelet && systemctl start kubelet
     ```
   - multi node 생성
     - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
-    - upload-certs: master node에 인증서가 자동 배포 됨.
+    - upload-certs: control plane 인스턴스에서 공유해야 하는 인증서를 업로드(자동배포), 수동으로 인증서를 복사할 경우는 이 옵션 생략
     ```bash
     kubeadm init --control-plane-endpoint "192.168.1.157:26443" \
                  --upload-certs \
@@ -183,6 +183,30 @@ Then you can join any number of worker nodes by running the following on each as
 kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
     --discovery-token-ca-cert-hash sha256:47d1682c0553aedb46863997a981572fdd25a4069038be1827c0ab482dce7aac
 EOF
+```
+
+#### 참고
+- certificate-key를 지정하여 나중에 조인에서 사용할 수 있음
+```bash
+shell> sudo kubeadm alpha certs certificate-key
+f8902e114ef118304e561c3ecd4d0b543adc226b7a07f675f56564185ffe0c07 
+```
+- join token 은 다시 확인할 수 있다.
+```bash
+kubeadm token create --print-join-command
+```
+- 인증서를 다시 업로드하고 새 암호 해독 키를 생성하려면 이미 클러스터에 연결된 control plane 노드에서 다음 명령을 사용
+```bash
+shell> sudo kubeadm init phase upload-certs --upload-certs
+W0322 16:20:40.631234  101997 validation.go:28] Cannot validate kube-proxy config - no validator is available
+W0322 16:20:40.631413  101997 validation.go:28] Cannot validate kubelet config - no validator is available
+[upload-certs] Storing the certificates in Secret "kubeadm-certs" in the "kube-system" Namespace
+[upload-certs] Using certificate key:
+7f97aaa65bfec1f039c4dbdf3a2073de853c708bd4d9ff9d72b776b0f9874c9d
+```
+- 클러스터를 control plane 조인(join)하는 데 필요한 전체 'kubeadm join' 플래그를 출력
+```bash
+shell> sudo kubeadm token create --print-join-command --certificate-key \ 7f97aaa65bfec1f039c4dbdf3a2073de853c708bd4d9ff9d72b776b0f9874c9d
 ```
 
 - 환경 변수 설정
