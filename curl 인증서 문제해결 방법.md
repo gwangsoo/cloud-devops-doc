@@ -64,4 +64,22 @@ wget --no-check-certificate https://curl.haxx.se/ca/cacert.pem
 ```bash
 curl -k -O https://curl.haxx.se/ca/cacert.pem
 ```
-2. url -v 옵션으로 CA 인증서 목록 파일의 위치를 확인한 후에 예전 파일은 백업하고 다운받은 인증서 파일을 덮어쓴다.
+2. curl -v 옵션으로 CA 인증서 목록 파일의 위치를 확인한 후에 예전 파일은 백업하고 다운받은 인증서 파일을 덮어쓴다.
+```bash
+curl -v https://download.docker.com
+
+* About to connect() to download.docker.com port 443 (#0)
+*   Trying 54.192.69.92...
+* Connected to download.docker.com (54.192.69.92) port 443 (#0)
+* Initializing NSS with certpath: sql:/etc/pki/nssdb
+*   CAfile: /etc/pki/tls/certs/ca-bundle.crt
+  CApath: none
+```
+```bash
+ll /etc/pki/tls/certs/ca-bundle.crt
+lrwxrwxrwx. 1 root root 49  3월  3 09:16 /etc/pki/tls/certs/ca-bundle.crt -> /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+```
+```bash
+mv /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem.bak
+mv ~/cacert.pem /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+```
