@@ -59,6 +59,7 @@ sudo yum list docker-ce --showduplicates
 - 특정버전 설치
 ```bash
 sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+sudo yum install docker-ce-19.03.15-3.el7 docker-ce-cli-19.03.15-3.el7
 ```
 
 ## 도커엔진 설치 확인
