@@ -65,6 +65,15 @@ wget --no-check-certificate https://curl.haxx.se/ca/cacert.pem
 curl -k -O https://curl.haxx.se/ca/cacert.pem
 ```
 2. curl -v 옵션으로 CA 인증서 목록 파일의 위치를 확인한 후에 예전 파일은 백업하고 다운받은 인증서 파일을 덮어쓴다.
+- update-ca-trust 사용
+```bash
+cp ~/*.pem /etc/pki/ca-trust/source/anchors/
+update-ca-trust
+ll /etc/pki/tls/cert.pem
+ll /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+```
+
+- 수동적용
 ```bash
 curl -v https://download.docker.com
 
