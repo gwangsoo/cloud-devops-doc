@@ -136,16 +136,17 @@ systemctl enable kubelet && systemctl start kubelet
 - K8s 초기화 명령 실행
   - single node 생성
     ```bash
-    kubeadm init --pod-network-cidr=20.96.0.0/12 --apiserver-advertise-address=192.168.1.157
+    kubeadm init --pod-network-cidr=20.96.0.0/16 --apiserver-advertise-address=192.168.1.161
     ```
   - multi node 생성
     - control-plane-endpoint: 노드1 DNS/IP 또는 LoadBalancer DNS/IP
     - upload-certs: control plane 인스턴스에서 공유해야 하는 인증서를 업로드(자동배포), 수동으로 인증서를 복사할 경우는 이 옵션 생략
     ```bash
-    kubeadm init --control-plane-endpoint "192.168.1.157:26443" \
+    kubeadm init --control-plane-endpoint=192.168.1.161:6443 \
                  --upload-certs \
-                 --pod-network-cidr "20.96.0.0/12" \
-                 --apiserver-advertise-address=192.168.1.157
+                 --pod-network-cidr=20.96.0.0/16 \
+                 --apiserver-advertise-address=192.168.1.161
+                 --v=5
     ```
 
   - 초기화 후 다시 설치해야 하는 경우
@@ -278,7 +279,7 @@ K8s CNI 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni
 - Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
 ```bash
 curl -O https://docs.projectcalico.org/v3.9/manifests/calico.yaml
-sed s/192.168.0.0\\/16/20.96.0.0\\/12/g -i calico.yaml
+sed s/192.168.0.0\\/16/20.96.0.0\\/16/g -i calico.yaml
 kubectl apply -f calico.yaml
 ```
 
