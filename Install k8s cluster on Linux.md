@@ -354,12 +354,16 @@ rm -rf /var/lib/cni/
 rm -rf /var/lib/kubelet/*
 rm -rf /etc/cni/
 
+ifconfig -s | awk '{print $1 " down"}' | grep -v ens33 | grep -v lo | grep -v Iface | xargs ifconfig
+or
 ifconfig cni0 down
 ifconfig flannel.1 down
 ifconfig weave down
 ifconfig canal down
 ifconfig califcc3247d241 down <- calico 는 cali 로 시작하는 이름으로 여러개 생겼을 수 있음
 ifconfig docker0 down
+
+ip link | grep '<' | grep -v lo | grep -v ens33 | grep -v lo | grep -v @ | grep -v datapath | awk -F ':' '{print $2}'
 
 ip link delete cni0
 ip link delete flannel.1
