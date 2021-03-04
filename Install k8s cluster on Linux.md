@@ -299,6 +299,7 @@ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documen
 ```
 
 ### Canal 설치
+- todo
 
 ## Etc
 
@@ -333,25 +334,36 @@ etcd-0               Healthy     {"health":"true"}
   ```
 
 ### coredns 상태가 Pending 에서 멈춘경우
-- 가상네트워크(calico/weave/flannel) 를 설치해야함.
+- 가상네트워크(calico/weave/flannel/canal) 를 설치해야함.
 
 ### coredns 상태가 ContainerCreating 에서 멈춘경우
-- 가상네트워크(calico/weave/flannel) 가 설치되었는지 확인
+- 가상네트워크(calico/weave/flannel/canal) 가 설치되었는지 확인
+- ifconfig 로 실제 network 및 lo 를 제외하고 가상네트웍은 제거하는게 좋다
 - CNI가 꼬였을 수 있으므로 cluster reset 후 cluster 재구성 (kubeadm init)
+
 ```bash
 kubeadm reset
+
+rm -rf /etc/cni/net.d
+ipvsadm --clear
+
 systemctl stop kubelet
 systemctl stop docker
+
 rm -rf /var/lib/cni/
 rm -rf /var/lib/kubelet/*
 rm -rf /etc/cni/
+
 ifconfig cni0 down
 ifconfig flannel.1 down
 ifconfig weave down
+ifconfig canal down
 ifconfig califcc3247d241 down <- calico 는 cali 로 시작하는 이름으로 여러개 생겼을 수 있음
 ifconfig docker0 down
+
 ip link delete cni0
 ip link delete flannel.1
 ip link delete weave
+ip link delete canal
 ip link delete califcc3247d241  <- calico 는 cali 로 시작하는 이름으로 여러개 생겼을 수 있음
 ```
