@@ -274,9 +274,22 @@ kubectl get nodes
 ```
 
 ## Networking
-- K8s CNI 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni-providers-flannel-calico-canal-and-weave/
+- CNI란?
+  - Container Network Interface (CNI)는 Linux Container의 Network Interface를 설정할때 이용되는 Interface이다. 자세한 내용은 아래 주소 참조.
+  - https://ssup2.github.io/theory_analysis/Container_Network_Interface/
+- K8s CNI plugin 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni-providers-flannel-calico-canal-and-weave/
 - 네트워크 정책 제공자 https://kubernetes.io/ko/docs/tasks/administer-cluster/network-policy-provider/
 - 네트워크 정책 선언 https://kubernetes.io/ko/docs/tasks/administer-cluster/declare-network-policy/
+
+### Weave 설치
+```bash
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+### Frannel 설치
+```bash
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+```
 
 ### Calico 설치
 - Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
@@ -289,16 +302,6 @@ kubectl apply -f calico.yaml
 - calico와 coredns 관련 Pod의 Status가 Running인지 확인 (2분정도 소요)
 ```bash
 kubectl get pods --all-namespaces
-```
-
-### Weave 설치
-```bash
-kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
-```
-
-### Frannel 설치
-```bash
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 ```
 
 ### Canal 설치
