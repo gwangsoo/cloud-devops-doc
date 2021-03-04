@@ -274,7 +274,10 @@ kubectl get nodes
 ```
 
 ## Networking
-K8s CNI 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni-providers-flannel-calico-canal-and-weave/
+- K8s CNI 비교 https://rancher.com/blog/2019/2019-03-21-comparing-kubernetes-cni-providers-flannel-calico-canal-and-weave/
+- 네트워크 정책 제공자 https://kubernetes.io/ko/docs/tasks/administer-cluster/network-policy-provider/
+- 네트워크 정책 선언 https://kubernetes.io/ko/docs/tasks/administer-cluster/declare-network-policy/
+
 ### Calico 설치
 - Calico는 기본 192.168.0.0/16 대역으로 설치가 되는데, 그럼 실제 VM이 사용하고 있는 대역대와 겹치기 때문에 수정을 해서 설치해야 할 경우
 ```bash
@@ -340,6 +343,8 @@ etcd-0               Healthy     {"health":"true"}
 - 가상네트워크(calico/weave/flannel/canal) 가 설치되었는지 확인
 - ifconfig 로 실제 network 및 lo 를 제외하고 가상네트웍은 제거하는게 좋다
 - CNI가 꼬였을 수 있으므로 cluster reset 후 cluster 재구성 (kubeadm init)
+- reset 후 reboot now
+- 재구성 후 에도 cni 의 문제가 지속되면 reboot now
 
 ```bash
 kubeadm reset
