@@ -79,3 +79,8 @@ Conditions:
   PIDPressure          False   Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 14:54:11 +0900   KubeletHasSufficientPID      kubelet has sufficient PID available
   Ready                True    Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 15:41:57 +0900   KubeletReady                 kubelet is posting ready status
 ```
+
+- node 의 NetworkUnavailable / MemoryPressure / DiskPressure / PIDPressure / Ready 문제 상태 확인
+```bash
+kubectl get nodes -o go-template='{{range .items}}{{$node := .}}{{range .status.conditions}}{{if ne .type "Ready"}}{{if eq .status "True"}}{{$node.metadata.name}}{{": "}}{{.type}}{{":"}}{{.status}}{{"\n"}}{{end}}{{else}}{{if ne .status "True"}}{{$node.metadata.name}}{{": "}}{{.type}}{{":"}}{{.status}}{{"\n"}}{{end}}{{end}}{{end}}{{end}}'
+```
