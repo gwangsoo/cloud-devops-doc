@@ -103,6 +103,9 @@ docker logs 47c4bc9889c8
 ```
 
 ## control-plane 노드 확인
+로그 데이터를 분석하기 전에 먼저 누가 리더인지 확인해야합니다.
+로그 데이터를 가져 오기 위해 각 노드를 살펴볼 수 있지만 그중 하나가 문제의 원인 일 수 있으므로 모든 컨테이너에 대한 로그를 살펴 봐야합니다.
+
 - endpoint 조회
 ```bash
 kubectl get endpoints -n kube-system -o wide
