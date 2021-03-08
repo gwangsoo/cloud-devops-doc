@@ -52,3 +52,30 @@ journalctl -u docker.service -f
 or
 journalctl -u docker.service | less
 ```
+
+## node 확인
+- 노드 상태 확인
+```bash
+kubectl get nodes -o wide
+
+NAME                     STATUS   ROLES    AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                KERNEL-VERSION                CONTAINER-RUNTIME
+nodea.ivycomtech.cloud   Ready    master   3d19h   v1.19.6   192.168.1.161   <none>        CentOS Linux 7 (Core)   3.10.0-1160.15.2.el7.x86_64   docker://20.10.4
+nodeb.ivycomtech.cloud   Ready    master   3d19h   v1.19.6   192.168.1.162   <none>        CentOS Linux 7 (Core)   3.10.0-1160.15.2.el7.x86_64   docker://20.10.4
+nodec.ivycomtech.cloud   Ready    master   3d19h   v1.19.6   192.168.1.163   <none>        CentOS Linux 7 (Core)   3.10.0-1160.15.2.el7.x86_64   docker://20.10.4
+noded.ivycomtech.cloud   Ready    <none>   3d19h   v1.19.6   192.168.1.164   <none>        CentOS Linux 7 (Core)   3.10.0-1160.15.2.el7.x86_64   docker://20.10.4
+```
+
+- node 정보 확인
+Conditions 의 NetworkUnavailable / MemoryPressure / DiskPressure / PIDPressure / Ready 정보 확인
+```bash
+kubectl describe node nodea.ivycomtech.cloud | less
+
+Conditions:
+  Type                 Status  LastHeartbeatTime                 LastTransitionTime                Reason                       Message
+  ----                 ------  -----------------                 ------------------                ------                       -------
+  NetworkUnavailable   False   Thu, 04 Mar 2021 15:04:00 +0900   Thu, 04 Mar 2021 15:04:00 +0900   WeaveIsUp                    Weave pod has set this
+  MemoryPressure       False   Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 14:54:11 +0900   KubeletHasSufficientMemory   kubelet has sufficient memory available
+  DiskPressure         False   Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 14:54:11 +0900   KubeletHasNoDiskPressure     kubelet has no disk pressure
+  PIDPressure          False   Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 14:54:11 +0900   KubeletHasSufficientPID      kubelet has sufficient PID available
+  Ready                True    Mon, 08 Mar 2021 10:04:16 +0900   Thu, 04 Mar 2021 15:41:57 +0900   KubeletReady                 kubelet is posting ready status
+```
