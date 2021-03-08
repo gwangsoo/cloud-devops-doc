@@ -144,3 +144,11 @@ a0a8411e3639        k8s.gcr.io/pause:3.2   "/pause"                 3 days ago  
 ```bash
 docker logs -f e426dbc1bfd1
 ```
+
+## nginx-proxy 확인
+이 서비스가 실행되고 있지 않으면 다른 노드가 kube-api-server 컨테이너와 통신 할 수 없습니다.
+
+## CNI 확인
+네트워크 또는 CNI 문제를 해결할 때 먼저 모든 호스트 간의 전송 계층이 올바르게 작동하는지 확인하는 것이 도움이됩니다.
+방화벽이나 프록시가 이러한 연결을 차단하는 경우 CNI가 실패합니다.
+https://academy.rancher.com/assets/courseware/v1/5503818b9b8e5c3edc4290c2ceaf0fa5/asset-v1:RANCHER+K101+2019+type@asset+block/Lab-19-Troubleshooting-the-Network-Overlay.pdf
