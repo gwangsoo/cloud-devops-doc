@@ -84,3 +84,60 @@ Conditions:
 ```bash
 kubectl get nodes -o go-template='{{range .items}}{{$node := .}}{{range .status.conditions}}{{if ne .type "Ready"}}{{if eq .status "True"}}{{$node.metadata.name}}{{": "}}{{.type}}{{":"}}{{.status}}{{"\n"}}{{end}}{{else}}{{if ne .status "True"}}{{$node.metadata.name}}{{": "}}{{.type}}{{":"}}{{.status}}{{"\n"}}{{end}}{{end}}{{end}}{{end}}'
 ```
+
+## etcd 확인
+- 
+```bash
+kubectl get nodes
+```
+```bash
+docker ps -a -fname=etcd
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS               NAMES
+47c4bc9889c8        0369cf4303ff           "etcd --advertise-cl…"   3 days ago          Up 3 days
+             k8s_etcd_etcd-nodea.ivycomtech.cloud_kube-system_f9f32943ba4de64447dda689075f9828_0
+faac0c064195        k8s.gcr.io/pause:3.2   "/pause"                 3 days ago          Up 3 days
+             k8s_POD_etcd-nodea.ivycomtech.cloud_kube-system_f9f32943ba4de64447dda689075f9828_0
+```
+```bash
+docker logs 47c4bc9889c8
+```
+
+## control-plane 노드 확인
+- endpoint 조회
+```bash
+kubectl get endpoints -n kube-system -o wide
+
+NAME                      ENDPOINTS                                            AGE
+kube-controller-manager   <none>                                               3d22h
+kube-dns                  10.40.0.1:53,10.46.0.1:53,10.40.0.1:53 + 3 more...   3d22h
+kube-scheduler            <none>                                               3d22h
+```
+
+- leader kube-controller-manager 확인
+```bash
+kubectl get endpoints -n kube-system kube-controller-manager \
+-o jsonpath='{.metadata.annotations.control-plane\.alpha\.kubernetes\.io/leader}{"\n"}'
+{"holderIdentity":"nodea.ivycomtech.cloud_90d894f1-3eed-411f-9e6d-807230a65520","leaseDurationSeconds":15,"acquireTime":"2021-03-04T06:40:35Z","renewTime":"2021-03-08T04:16:21Z","leaderTransitions":3}
+```
+
+- leader kube-scheduler 확인
+```bash
+kubectl get endpoints -n kube-system kube-scheduler \
+-o jsonpath='{.metadata.annotations.control-plane\.alpha\.kubernetes\.io/leader}{"\n"}'
+{"holderIdentity":"nodeb.ivycomtech.cloud_7e0330c7-68f3-4da2-8d99-69c7dfffb17c","leaseDurationSeconds":15,"acquireTime":"2021-03-04T06:41:09Z","renewTime":"2021-03-08T04:20:57Z","leaderTransitions":3}
+```
+
+- leader kube-apiserver 확인
+각 노드에서 kube-apiserver container 를 찾아서 로그가 발생되는 node 를 보고 확인한다.
+```bash
+docker ps -a -fname=kube-apiserver
+
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS               NAMES
+e426dbc1bfd1        9ba91a90b7d1           "kube-apiserver --ad…"   3 days ago          Up 3 days
+             k8s_kube-apiserver_kube-apiserver-nodea.ivycomtech.cloud_kube-system_74f52c6f3dee0f867726a9f75165f903_0
+a0a8411e3639        k8s.gcr.io/pause:3.2   "/pause"                 3 days ago          Up 3 days
+             k8s_POD_kube-apiserver-nodea.ivycomtech.cloud_kube-system_74f52c6f3dee0f867726a9f75165f903_0
+```
+```bash
+docker logs -f e426dbc1bfd1
+```
