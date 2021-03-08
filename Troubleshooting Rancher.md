@@ -40,3 +40,15 @@ kubectl -n kube-system get configmap cattle-controllers -o jsonpath='{.metadata.
 {"holderIdentity":"rancher-85c9cf85ff-qt2k5","leaseDurationSeconds":45,"acquireTime":"2021-03-04T06:29:41Z","renewTime":"2021-03-08T00:43:05Z","leaderTransitions":0}
 ```
 
+## docker 엔진 상태 및 로그 확인
+- docker 서비스 상태 확인
+```bash
+systemctl status docker.service
+```
+
+- docker 서비스 로그 확인
+```bash
+journalctl -u docker.service -f
+or
+journalctl -u docker.service | less
+```
