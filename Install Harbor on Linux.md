@@ -345,6 +345,8 @@ total 12
 -rw-r--r--. 1 root root 2049 Mar 10 14:14 ca.crt
 -rw-r--r--. 1 root root 2126 Mar 10 14:14 harbor.ivycomtech.cloud.cert
 -rw-r--r--. 1 root root 3243 Mar 10 14:14 harbor.ivycomtech.cloud.key
+
+# systemctl restart docker
 ```
 
 ## 설치 실패시 문제해결
