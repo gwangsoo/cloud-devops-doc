@@ -169,8 +169,8 @@ tar xvf harbor-offline-installer-v2.1.3.tgz
 1. 서버 인증서와 키를 Harbor 호스트의 certficates 폴더에 복사합니다.
    ```bash
    sudo mkdir /data/cert
-   cp harbor.ivycomtech.cloud.crt /data/cert/
-   cp harbor.ivycomtech.cloud.key /data/cert/
+   sudo cp harbor.ivycomtech.cloud.crt /data/cert/
+   sudo cp harbor.ivycomtech.cloud.key /data/cert/
    ```
 2. Docker에서 사용하기 위해 crt 파일을 cert 파일로 변환합니다.
    Docker 데몬은 .crt파일을 CA 인증서로 해석 하고 .cert파일을 클라이언트 인증서로 해석하기 때문입니다.
@@ -181,9 +181,9 @@ tar xvf harbor-offline-installer-v2.1.3.tgz
    ```bash
    sudo mkdir -p /etc/docker/certs.d/harbor.ivycomtech.cloud
    
-   cp harbor.ivycomtech.cloud.cert /etc/docker/certs.d/harbor.ivycomtech.cloud/
-   cp harbor.ivycomtech.cloud.key /etc/docker/certs.d/harbor.ivycomtech.cloud/
-   cp ca.crt /etc/docker/certs.d/harbor.ivycomtech.cloud/
+   sudo cp harbor.ivycomtech.cloud.cert /etc/docker/certs.d/harbor.ivycomtech.cloud/
+   sudo cp harbor.ivycomtech.cloud.key /etc/docker/certs.d/harbor.ivycomtech.cloud/
+   sudo cp ca.crt /etc/docker/certs.d/harbor.ivycomtech.cloud/
    ```
    기본 nginx 443 포트를 다른 포트에 매핑 한 경우
    ```bash
