@@ -307,6 +307,27 @@ kubectl get pods --all-namespaces
 ### Canal 설치
 - todo
 
+## Ingress controller 설치
+인그레스 컨트롤러는 클러스터와 함께 자동으로 실행되지 않는다.
+클러스터에 가장 적합한 인그레스 컨트롤러 구현을 선택해서 설치해야 한다.
+프로젝트로서 쿠버네티스는 AWS, GCE와 nginx 인그레스 컨트롤러를 지원하고 유지한다.
+https://kubernetes.io/ko/docs/concepts/services-networking/ingress-controllers/
+
+### nginx-ingress controll 설치
+https://github.com/kubernetes/ingress-nginx/blob/master/README.md
+
+1. helm 을 통해 설치
+   ```bash
+   helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+   helm repo update
+   helm install ingress-nginx ingress-nginx/ingress-nginx
+   ```
+2. 설치된 버전 확인
+   ```bash
+   POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=ingress-nginx -o jsonpath='{.items[0].metadata.name}')
+   kubectl exec -it $POD_NAME -- /nginx-ingress-controller --version
+   ```
+
 ## Etc
 
 ### master node 에 pod 배포 가능하게 하기
