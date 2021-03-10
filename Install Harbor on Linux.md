@@ -210,24 +210,35 @@ https://goharbor.io/docs/1.10/install-config/troubleshoot-installation/#https
 ## Harbor YML 구성
 https://goharbor.io/docs/1.10/install-config/configure-yml-file/
 
+### https 사용하지 않는 방법
 - hostname ip주소 설정 (127.0.0.1) 로 설정하면 안됨
 - https 사용하지 않을 경우 주석(#) 처리
-
-```bash
-cp harbor.yml.tmpl harbor.yml
-
-vi harbor.yml
-
-hostname: 192.168.1.156
-
-# https related config
-#https:
-#  # https port for harbor, default is 443
-#  port: 443
-#  # The path of cert and key files for nginx
-#  certificate: /your/certificate/path
-#  private_key: /your/private/key/path
-```
+  ```bash
+  cp harbor.yml.tmpl harbor.yml
+  
+  vi harbor.yml
+  
+  hostname: 192.168.1.156
+  # https related config
+  #https:
+  #  # https port for harbor, default is 443
+  #  port: 443
+  #  # The path of cert and key files for nginx
+  #  certificate: /your/certificate/path
+  #  private_key: /your/private/key/path
+  ```
+  
+### https 사용방법
+- 서버인증서 crt 파일, key 파일은 미리 준비해 둬야 함.
+  ```bash
+  vi harbor.yml
+  
+  hostname: harbor.ivycomtech.cloud
+  https:
+    port: 443
+    certificate: /home/admin/harbor/cert/harbor.ivycomtech.cloud.crt
+    private_key: /home/admin/harbor/cert/harbor.ivycomtech.cloud.key
+  ```
 
 ## 설치 스크립트 실행
 https://goharbor.io/docs/1.10/install-config/run-installer-script/
