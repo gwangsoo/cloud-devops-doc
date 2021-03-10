@@ -322,5 +322,30 @@ admin / Harbor12345
    docker push harbor.ivycomtech.cloud/library/demo:20210310-1
    ```
 
+## k8s pull
+자체인증서는 k8s에서 이미지 pull 할때 신뢰할 수 없는 인증서 이므로 다음의 오류가 발생됩니다.
+- imagepullbackoff x509 certificate signed by unknown authority
+각 k8s 클러스터 각 노드에 인증서를 넣어주야 합니다.
+```bash
+# mkdir -p /etc/docker/certs.d/harbor.ivycomtech.cloud
+
+# scp -r root@192.168.1.156:/etc/docker/certs.d/harbor.ivycomtech.cloud /etc/docker/certs.d
+The authenticity of host '192.168.1.156 (192.168.1.156)' can't be established.
+ECDSA key fingerprint is SHA256:/wyDIAOXeW8GOcKbNZc5JX3MxG1XEgNV3xJwb98NAI4.
+ECDSA key fingerprint is MD5:ad:12:c5:6a:c2:da:7b:bf:f7:8b:5b:1e:b4:95:78:81.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.1.156' (ECDSA) to the list of known hosts.
+root@192.168.1.156's password:
+harbor.ivycomtech.cloud.cert      100% 2126     2.9MB/s   00:00
+harbor.ivycomtech.cloud.key       100% 3243     3.0MB/s   00:00
+ca.crt                            100% 2049     2.7MB/s   00:00
+
+# ll /etc/docker/certs.d/harbor.ivycomtech.cloud
+total 12
+-rw-r--r--. 1 root root 2049 Mar 10 14:14 ca.crt
+-rw-r--r--. 1 root root 2126 Mar 10 14:14 harbor.ivycomtech.cloud.cert
+-rw-r--r--. 1 root root 3243 Mar 10 14:14 harbor.ivycomtech.cloud.key
+```
+
 ## 설치 실패시 문제해결
 - https://goharbor.io/docs/1.10/install-config/troubleshoot-installation/
