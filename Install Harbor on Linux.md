@@ -284,5 +284,43 @@ sudo docker-compose up -d
 - 초기비밀번호 (harbor.yml 에 정의되어 있음)
 admin / Harbor12345
 
+## docker push 방법
+1. docker daemon.json 에 내부저장소 추가
+   .docker 폴더아래에 daemon.json 파일을 열어서 다음과 같이 내부저장소 정보를 넣는다.
+   ```bash
+   {
+     "registry-mirrors": [],
+     "insecure-registries": ["harbor.ivycomtech.cloud"],
+     "debug": false,
+     "experimental": false,
+     "features": {
+       "buildkit": true
+     }
+   }
+   ```
+2. docker 재시작
+3. docker login
+   ```bash
+   docker login harbor.ivycomtech.cloud
+   
+   Username: gwangsoo
+   Password:
+   Login Succeeded
+   ```
+4. docker build
+   ```bash
+   docker build -t harbor.ivycomtech.cloud/library/demo:20210310-1 .
+   or
+   docker build .
+   ```
+5. docker tag
+   ```bash
+   docker tag gwangsoo72/demo:demoSpringApp-v1 harbor.ivycomtech.cloud/library/demo:20210310
+   ```
+6. docker push
+   ```bash
+   docker push harbor.ivycomtech.cloud/library/demo:20210310-1
+   ```
+
 ## 설치 실패시 문제해결
 - https://goharbor.io/docs/1.10/install-config/troubleshoot-installation/
