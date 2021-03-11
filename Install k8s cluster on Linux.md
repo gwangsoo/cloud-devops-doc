@@ -378,7 +378,7 @@ kubectl apply -f demo-svc.yaml -n ivy-default
 ```bash
 cat <<EOF > demo-ingress.yaml
 apiVersion: extensions/v1beta1
- kind: Ingress
+kind: Ingress
 metadata:
   name: demo-ingress
   annotations:
