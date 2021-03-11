@@ -392,6 +392,7 @@ spec:
         backend:
           serviceName: demo-svc
           servicePort: 80
+EOF
 
 kubectl apply -f demo-ingress.yaml -n ivy-default
 ```
