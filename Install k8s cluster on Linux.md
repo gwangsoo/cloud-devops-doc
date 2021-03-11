@@ -316,6 +316,90 @@ https://kubernetes.io/ko/docs/concepts/services-networking/ingress-controllers/
 ### nginx-ingress controll 설치
 https://github.com/kubernetes/ingress-nginx/blob/master/README.md
 
+#### 직접 설치 (Bare-metal)
+
+1. 설치
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.44.0/deploy/static/provider/baremetal/deploy.yaml
+```
+
+2. 설치 확인
+```bash
+kubectl get svc --namespace=ingress-nginx
+```
+
+3. Ingress 생성
+Ingress Controller는 Ingress 규칙을 관리하기 위한 서버일 뿐이고, 실제 Ingress 규칙(L7규칙)을 생성 해야함.
+```bash
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: test
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: foo.bar.com
+    http:
+      paths:
+      - path: /foo
+        backend:
+          serviceName: svc1
+          servicePort: 80
+      - path: /bar
+        backend:
+          serviceName: svc2
+          servicePort: 80
+```
+
+4. Ingress 적용
+```bash
+kubectl apply -f ingress.yaml --namespace=ingress-nginx
+```
+
+5. svc 및 ingress 샘플
+```bash
+cat <<EOF > demo-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-svc
+spec:
+  selector:
+   app: demo
+  ports:
+     - name: http
+       port: 80
+       targetPort: 8080
+EOF
+
+kubectl apply -f demo-svc.yaml -n ivy-default
+```
+```bash
+cat <<EOF > demo-ingress.yaml
+apiVersion: extensions/v1beta1
+ kind: Ingress
+metadata:
+  name: demo-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: nodea.ivycomtech.cloud
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: demo-svc
+          servicePort: 80
+
+kubectl apply -f demo-ingress.yaml -n ivy-default
+```
+
+6. 베어메탈설치 시 고려사항
+https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
+
+#### helm 으로 설치
 1. helm 을 통해 설치
    ```bash
    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
