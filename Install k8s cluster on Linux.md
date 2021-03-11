@@ -330,34 +330,7 @@ kubectl get svc --namespace=ingress-nginx
 
 3. Ingress 생성
 Ingress Controller는 Ingress 규칙을 관리하기 위한 서버일 뿐이고, 실제 Ingress 규칙(L7규칙)을 생성 해야함.
-```bash
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: test
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-  - host: foo.bar.com
-    http:
-      paths:
-      - path: /foo
-        backend:
-          serviceName: svc1
-          servicePort: 80
-      - path: /bar
-        backend:
-          serviceName: svc2
-          servicePort: 80
-```
-
-4. Ingress 적용
-```bash
-kubectl apply -f ingress.yaml --namespace=ingress-nginx
-```
-
-5. svc 및 ingress 샘플
+- Ingress 를 통해 연결할 서비스 등록
 ```bash
 cat <<EOF > demo-svc.yaml
 apiVersion: v1
@@ -375,6 +348,7 @@ EOF
 
 kubectl apply -f demo-svc.yaml -n ivy-default
 ```
+- Ingress 등록
 ```bash
 cat <<EOF > demo-ingress.yaml
 apiVersion: extensions/v1beta1
@@ -397,7 +371,7 @@ EOF
 kubectl apply -f demo-ingress.yaml -n ivy-default
 ```
 
-6. 베어메탈설치 시 고려사항
+4. 베어메탈설치 시 고려사항 (HA 구성을 위한 network topology 등)
 https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
 
 #### helm 으로 설치
