@@ -176,6 +176,8 @@ kubectl -n cattle-system delete pods,daemonset,service,replicaset,deployment --a
 ```
 
 ### Nodeport 서비스 추가
+ingress 없는 경우 nodeport 를 등록하여 수동을 접속하도록 한다. ingress 가 있는 경우 ingress 를 통하여 접속됨.
+
 ```bash
 vi rancher-svc-nodeport.yaml
 
