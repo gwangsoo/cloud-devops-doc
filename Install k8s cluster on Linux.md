@@ -186,7 +186,7 @@ https://kubetm.github.io/practice/appendix/installation_case1/
   EOF
   ```
 
-#### 참고
+#### 참고 - 조인에서 사용되는 key는 만료되므로 필요시 새로 생성하여 join 해야 함.
 - certificate-key를 지정하여 나중에 조인에서 사용할 수 있음
   ```bash
   shell> sudo kubeadm alpha certs certificate-key
