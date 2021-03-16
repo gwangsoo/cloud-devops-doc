@@ -393,6 +393,106 @@ https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
    kubectl exec -it $POD_NAME -- /nginx-ingress-controller --version
    ```
 
+## Local Persistent Volume 설정
+https://lapee79.github.io/article/use-a-local-disk-by-local-volume-static-provisioner-in-kubernetes/
+
+1. WaitForFirstConsumer Binding mode를 가지는 StorageClass를 생성
+   ```bash
+   cat << EOF | kubectl apply -f -
+   kind: StorageClass
+   apiVersion: storage.k8s.io/v1
+   metadata:
+     name: local-storage
+   provisioner: kubernetes.io/no-provisioner
+   volumeBindingMode: WaitForFirstConsumer
+   EOF
+   ```
+   
+2. 호스트에서 볼륨 준비
+   이 명령어들을 POD가 생성될 worker node 상에서 실행합니다.
+   ```bash
+   mkdir -p /data/volumes/pv1
+   chmod 777 /data/volumes/pv1
+   ```
+   
+3. Local PersistentVolume 생성
+   ```bash
+   cat << EOF | kubectl apply -f -
+   apiVersion: v1
+   kind: PersistentVolume
+   metadata:
+     name: local-pv
+   spec:
+     capacity:
+       storage: 50Gi
+     accessModes:
+     - ReadWriteOnce
+     persistentVolumeReclaimPolicy: Retain
+     storageClassName: local-storage
+     local:
+       path: /data/volumes/pv1
+     nodeAffinity:
+       required:
+         nodeSelectorTerms:
+         - matchExpressions:
+           - key: kubernetes.io/hostname
+             operator: In
+             values:
+             - k8s-worker-01
+   EOF
+   ```
+   ```bash
+   kubectl get pv -o wide
+   
+   NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS    REASON   AGE    VOLUMEMODE
+   local-pv   50Gi       RWO            Retain           Available           local-storage            2m1s   Filesystem
+   ```
+
+4. PersistentVolumeClaim 생성
+   ```bash
+   cat << EOF | kubectl apply -f -
+   kind: PersistentVolumeClaim
+   apiVersion: v1
+   metadata:
+     name: local-pvc
+   spec:
+     accessModes:
+     - ReadWriteOnce
+     storageClassName: local-storage
+     resources:
+       requests:
+         storage: 50Gi
+   EOF
+   ```
+   ```bash
+   kubectl get pvc
+
+   NAME        STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS    AGE
+   local-pvc   Pending                                      local-storage   82s
+   ```
+
+5. Pod에 volume 추가 샘플
+   Pod에 매핑되면 pvc 의 상태가 Bound 로 변경되고, pv의 claim 에 pvc 이름이 매핑됨.
+
+   ```bash
+   cat << EOF | kubectl apply -f -
+   apiVersion: v1
+   kind: Pod
+   spec:
+     containers:
+     - name: app
+       image: busybox
+       command: ['sh', '-c', 'echo "The local volume is mounted!" > /mnt/test.txt && sleep 3600']
+       volumeMounts:
+         - name: local-persistent-storage
+           mountPath: /mnt
+     volumes:
+       - name: local-persistent-storage
+         persistentVolumeClaim:
+           claimName: local-pvc
+   EOF
+   ```
+
 ## Etc
 
 ### master node 에 pod 배포 가능하게 하기
