@@ -47,14 +47,14 @@ https://kubetm.github.io/practice/appendix/installation_case1/
   cat << EOF >> /etc/hosts
   192.168.1.155 runner.ivycomtech.cloud
   192.168.1.156 harbor.ivycomtech.cloud
-  192.168.1.157 rancher.ivycomtech.cloud
   192.168.1.158 gitlab.ivycomtech.cloud
   192.168.1.160 nexus.ivycomtech.cloud
   192.168.1.161 nodea.ivycomtech.cloud
   192.168.1.162 nodeb.ivycomtech.cloud
   192.168.1.163 nodec.ivycomtech.cloud
   192.168.1.164 noded.ivycomtech.cloud
-  192.168.1.165 rancher2.ivycomtech.cloud
+  192.168.1.181 nodee.ivycomtech.cloud
+  192.168.1.182 nodef.ivycomtech.cloud
   EOF
   ```
 
