@@ -273,6 +273,12 @@ kubeadm join 192.168.1.157:26443 --token xor8z4.fe1vf24slczx1p4i \
 kubectl get nodes
 ```
 
+### node 삭제
+```bash
+kubectl drain <worker node> --delete-local-data --force --ignore-daemonsets
+kubectl delete node/<worker node>
+```
+
 ## Networking
 - CNI란?
   - Container Network Interface (CNI)는 Linux Container의 Network Interface를 설정할때 이용되는 Interface이다. 자세한 내용은 아래 주소 참조.
