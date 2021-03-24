@@ -124,7 +124,7 @@ https://www.elastic.co/guide/en/kibana/current/docker.html
      ```
 
 7. Kibana 설정
-   - TODO
+   - https://epicarts.tistory.com/75
 
 8. 기타
    - 로그가 elasticsearch 로 전송안되는 경우 fluentd 로그 확인
