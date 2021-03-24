@@ -13,6 +13,7 @@ https://www.elastic.co/guide/en/kibana/current/docker.html
 1. yml 및 data 폴더 생성
    ```bash
    mkdir -p ./eks/data
+   chmod 777 ./eks/data
    cd ./eks
    ```
 
