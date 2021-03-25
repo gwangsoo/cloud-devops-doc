@@ -82,21 +82,17 @@ export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
 ```bash
 sudo gitlab-runner register
 
-[admin@runner ~]$ sudo gitlab-runner register
-Runtime platform                                    arch=amd64 os=linux pid=56398 revision=132560ae version=13.9.0~beta.142.g132560ae
-Running in system-mode.
+[admin@runner ~]$ sudo gitlab-runner register -n \
+--url http://gitlab.ivycomtech.cloud/ \
+--registration-token vqxuHk32syKByEDrQQD7 \
+--executor docker \
+--description "My Docker Runner" \
+--docker-image "docker:stable" \
+--docker-privileged
 
-Enter the GitLab instance URL (for example, https://gitlab.com/):
-http://192.168.1.158/
-Enter the registration token:
-p4vx_oqpa7hptDtqQYt6
-Enter a description for the runner:
-[runner.ivycomtech.cloud]:
-Enter tags for the runner (comma-separated):
-ivy-ci-runner
-Registering runner... succeeded                     runner=p4vx_oqp
-Enter an executor: docker-ssh+machine, custom, docker, docker-ssh, virtualbox, docker+machine, parallels, shell, ssh, kubernetes:
-shell
+Runtime platform                                    arch=amd64 os=linux pid=34430 revision=132560ae version=13.9.0~beta.142.g132560ae
+Running in system-mode.
+Registering runner... succeeded                     runner=vqxuHk32
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
 
