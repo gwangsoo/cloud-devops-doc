@@ -88,7 +88,8 @@ sudo gitlab-runner register
 --executor docker \
 --description "My Docker Runner" \
 --docker-image "docker:stable" \
---docker-privileged
+--docker-privileged \
+--docker-volumes "/certs/client"
 
 Runtime platform                                    arch=amd64 os=linux pid=34430 revision=132560ae version=13.9.0~beta.142.g132560ae
 Running in system-mode.
@@ -96,4 +97,12 @@ Registering runner... succeeded                     runner=vqxuHk32
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
 
-https://runner.ivycomtech.cloud/
+## GitLab runner command
+- 등록된 Runner 조회
+  ```bash
+  gitlab-runner list
+  ```
+- Runner 등록 취소
+  ```bash
+  gitlab-runner unregister --all-runners
+  ```
