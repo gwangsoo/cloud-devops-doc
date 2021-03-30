@@ -115,17 +115,17 @@ tar xvf harbor-offline-installer-v2.1.3.tgz
 2. CA 인증서를 생성
    ```bash
    openssl req -x509 -new -nodes -sha512 -days 3650 \
-   -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=harbor.ivycomtech.cloud" \
+   -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=harbor.192-168-1-156.nip.io" \
    -key ca.key \
    -out ca.crt
    ```
    
 #### 서버인증서 생성
-인증서에는 일반적으로 .crt 파일과 .key 파일이 포함됩니다. (harbor.ivycomtech.cloud.crt, harbor.ivycomtech.cloud.key)
+인증서에는 일반적으로 .crt 파일과 .key 파일이 포함됩니다. (harbor.192-168-1-156.nip.io.crt, harbor.192-168-1-156.nip.io.key)
 
 1. 개인키 생성
    ```bash
-   openssl genrsa -out harbor.ivycomtech.cloud.key 4096
+   openssl genrsa -out harbor.192-168-1-156.nip.io.key 4096
    
    Generating RSA private key, 4096 bit long modulus
    .................................................................++
@@ -135,9 +135,9 @@ tar xvf harbor-offline-installer-v2.1.3.tgz
 2. CSR (인증서 서명 요청)을 생성
    ```bash
    openssl req -sha512 -new \
-    -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=harbor.ivycomtech.cloud" \
-    -key harbor.ivycomtech.cloud.key \
-    -out harbor.ivycomtech.cloud.csr
+    -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=harbor.192-168-1-156.nip.io" \
+    -key harbor.192-168-1-156.nip.io.key \
+    -out harbor.192-168-1-156.nip.io.csr
    ```
 3. x509 v3 확장 파일을 생성
    Harbor 호스트에 연결하기 위해 FQDN 또는 IP 주소를 사용하는지 여부에 관계없이 SAN (주체 대체 이름) 및 x509 v3을 준수하는 Harbor 호스트에 대한 인증서를 생성 할 수 있도록이 파일을 만들어야합니다. 확장 요구 사항. DNS도메인을 반영 하도록 항목을 바꿉니다 .
@@ -150,44 +150,44 @@ tar xvf harbor-offline-installer-v2.1.3.tgz
    subjectAltName = @alt_names
    
    [alt_names]
-   DNS.1=harbor.ivycomtech.cloud
+   DNS.1=harbor.192-168-1-156.nip.io
    DNS.2=ivycomtech
    DNS.3=harbor
    EOF
    ```
 4. v3.ext파일을 사용 하여 Harbor 호스트에 대한 인증서를 생성
-   harbor.ivycomtech.cloud CRS 파일을 CRT 파일 이름으로 바꿉니다.
+   harbor.192-168-1-156.nip.io CRS 파일을 CRT 파일 이름으로 바꿉니다.
    ```bash
    openssl x509 -req -sha512 -days 3650 \
        -extfile v3.ext \
        -CA ca.crt -CAkey ca.key -CAcreateserial \
-       -in harbor.ivycomtech.cloud.csr \
-       -out harbor.ivycomtech.cloud.crt
+       -in harbor.192-168-1-156.nip.io.csr \
+       -out harbor.192-168-1-156.nip.io.crt
    ```
 
 ### Harbor 및 Docker에 인증서 적용
 1. 서버 인증서와 키를 Harbor 호스트의 certficates 폴더에 복사합니다.
    ```bash
    sudo mkdir /data/cert
-   sudo cp harbor.ivycomtech.cloud.crt /data/cert/
-   sudo cp harbor.ivycomtech.cloud.key /data/cert/
+   sudo cp harbor.192-168-1-156.nip.io.crt /data/cert/
+   sudo cp harbor.192-168-1-156.nip.io.key /data/cert/
    ```
 2. Docker에서 사용하기 위해 crt 파일을 cert 파일로 변환합니다.
    Docker 데몬은 .crt파일을 CA 인증서로 해석 하고 .cert파일을 클라이언트 인증서로 해석하기 때문입니다.
    ```bash
-   openssl x509 -inform PEM -in harbor.ivycomtech.cloud.crt -out harbor.ivycomtech.cloud.cert
+   openssl x509 -inform PEM -in harbor.192-168-1-156.nip.io.crt -out harbor.192-168-1-156.nip.io.cert
    ```
 3. 먼저 적절한 폴더를 만들고 서버 인증서, 키 및 CA 파일을 Harbor 호스트의 Docker 인증서 폴더에 복사합니다.
    ```bash
-   sudo mkdir -p /etc/docker/certs.d/harbor.ivycomtech.cloud
+   sudo mkdir -p /etc/docker/certs.d/harbor.192-168-1-156.nip.io
    
-   sudo cp harbor.ivycomtech.cloud.cert /etc/docker/certs.d/harbor.ivycomtech.cloud/
-   sudo cp harbor.ivycomtech.cloud.key /etc/docker/certs.d/harbor.ivycomtech.cloud/
-   sudo cp ca.crt /etc/docker/certs.d/harbor.ivycomtech.cloud/
+   sudo cp harbor.192-168-1-156.nip.io.cert /etc/docker/certs.d/harbor.192-168-1-156.nip.io/
+   sudo cp harbor.192-168-1-156.nip.io.key /etc/docker/certs.d/harbor.192-168-1-156.nip.io/
+   sudo cp ca.crt /etc/docker/certs.d/harbor.192-168-1-156.nip.io/
    ```
    기본 nginx 443 포트를 다른 포트에 매핑 한 경우
    ```bash
-   /etc/docker/certs.d/harbor.ivycomtech.cloud:port
+   /etc/docker/certs.d/harbor.192-168-1-156.nip.io:port
    or
    /etc/docker/certs.d/harbor_IP:port
    ```
@@ -201,9 +201,9 @@ https://goharbor.io/docs/1.10/install-config/troubleshoot-installation/#https
 다음 예는 사용자 지정 인증서를 사용하는 구성을 보여줍니다.
 ```bash
 /etc/docker/certs.d/
-    └── harbor.ivycomtech.cloud:port
-       ├── harbor.ivycomtech.cloud.cert  <-- Server certificate signed by CA
-       ├── harbor.ivycomtech.cloud.key   <-- Server key signed by CA
+    └── harbor.192-168-1-156.nip.io:port
+       ├── harbor.192-168-1-156.nip.io.cert  <-- Server certificate signed by CA
+       ├── harbor.192-168-1-156.nip.io.key   <-- Server key signed by CA
        └── ca.crt                        <-- Certificate authority that signed the registry certificate
 ```
 
@@ -233,11 +233,11 @@ https://goharbor.io/docs/1.10/install-config/configure-yml-file/
   ```bash
   vi harbor.yml
   
-  hostname: harbor.ivycomtech.cloud
+  hostname: harbor.192-168-1-156.nip.io
   https:
     port: 443
-    certificate: /home/admin/harbor/cert/harbor.ivycomtech.cloud.crt
-    private_key: /home/admin/harbor/cert/harbor.ivycomtech.cloud.key
+    certificate: /home/admin/harbor/cert/harbor.192-168-1-156.nip.io.crt
+    private_key: /home/admin/harbor/cert/harbor.192-168-1-156.nip.io.key
   ```
 
 ## 설치 스크립트 실행
@@ -290,7 +290,7 @@ admin / Harbor12345
    ```bash
    {
      "registry-mirrors": [],
-     "insecure-registries": ["harbor.ivycomtech.cloud"],
+     "insecure-registries": ["harbor.192-168-1-156.nip.io"],
      "debug": false,
      "experimental": false,
      "features": {
@@ -301,7 +301,7 @@ admin / Harbor12345
 2. docker 재시작
 3. docker login
    ```bash
-   docker login harbor.ivycomtech.cloud
+   docker login harbor.192-168-1-156.nip.io
    
    Username: gwangsoo
    Password:
@@ -309,17 +309,17 @@ admin / Harbor12345
    ```
 4. docker build
    ```bash
-   docker build -t harbor.ivycomtech.cloud/library/demo:20210310-1 .
+   docker build -t harbor.192-168-1-156.nip.io/library/demo:20210310-1 .
    or
    docker build .
    ```
 5. docker tag
    ```bash
-   docker tag gwangsoo72/demo:demoSpringApp-v1 harbor.ivycomtech.cloud/library/demo:20210310
+   docker tag gwangsoo72/demo:demoSpringApp-v1 harbor.192-168-1-156.nip.io/library/demo:20210310
    ```
 6. docker push
    ```bash
-   docker push harbor.ivycomtech.cloud/library/demo:20210310-1
+   docker push harbor.192-168-1-156.nip.io/library/demo:20210310-1
    ```
 
 ## k8s pull
@@ -327,24 +327,24 @@ admin / Harbor12345
 - imagepullbackoff x509 certificate signed by unknown authority
 각 k8s 클러스터 각 노드에 인증서를 넣어주야 합니다.
 ```bash
-# mkdir -p /etc/docker/certs.d/harbor.ivycomtech.cloud
+# mkdir -p /etc/docker/certs.d/harbor.192-168-1-156.nip.io
 
-# scp -r root@192.168.1.156:/etc/docker/certs.d/harbor.ivycomtech.cloud /etc/docker/certs.d
+# scp -r root@192.168.1.156:/etc/docker/certs.d/harbor.192-168-1-156.nip.io /etc/docker/certs.d
 The authenticity of host '192.168.1.156 (192.168.1.156)' can't be established.
 ECDSA key fingerprint is SHA256:/wyDIAOXeW8GOcKbNZc5JX3MxG1XEgNV3xJwb98NAI4.
 ECDSA key fingerprint is MD5:ad:12:c5:6a:c2:da:7b:bf:f7:8b:5b:1e:b4:95:78:81.
 Are you sure you want to continue connecting (yes/no)? yes
 Warning: Permanently added '192.168.1.156' (ECDSA) to the list of known hosts.
 root@192.168.1.156's password:
-harbor.ivycomtech.cloud.cert      100% 2126     2.9MB/s   00:00
-harbor.ivycomtech.cloud.key       100% 3243     3.0MB/s   00:00
+harbor.192-168-1-156.nip.io.cert      100% 2126     2.9MB/s   00:00
+harbor.192-168-1-156.nip.io.key       100% 3243     3.0MB/s   00:00
 ca.crt                            100% 2049     2.7MB/s   00:00
 
-# ll /etc/docker/certs.d/harbor.ivycomtech.cloud
+# ll /etc/docker/certs.d/harbor.192-168-1-156.nip.io
 total 12
 -rw-r--r--. 1 root root 2049 Mar 10 14:14 ca.crt
--rw-r--r--. 1 root root 2126 Mar 10 14:14 harbor.ivycomtech.cloud.cert
--rw-r--r--. 1 root root 3243 Mar 10 14:14 harbor.ivycomtech.cloud.key
+-rw-r--r--. 1 root root 2126 Mar 10 14:14 harbor.192-168-1-156.nip.io.cert
+-rw-r--r--. 1 root root 3243 Mar 10 14:14 harbor.192-168-1-156.nip.io.key
 
 # systemctl restart docker
 ```
