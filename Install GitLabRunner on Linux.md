@@ -100,10 +100,24 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 ## Gitlab runner 사설 인증서 설정
 - 사설인증서 적용하려면 아래 "/etc/docker/certs.d" 폴더를 docker.runner 의 volume에 적용
   ```bash
-  [root@runner ~]# ll /etc/docker/certs.d
+  [root@runner ~]# ll -R /etc/docker/certs.d
+  /etc/docker/certs.d:
   total 0
   drwxr-xr-x. 2 root root 138 Mar 30 15:59 harbor.192-168-1-156.nip.io
   drwxr-xr-x. 2 root root  91 Mar 25 17:32 harbor.ivycomtech.cloud
+  
+  /etc/docker/certs.d/harbor.192-168-1-156.nip.io:
+  total 16
+  -rw-r--r--. 1 root root 2057 Mar 30 15:53 ca.crt
+  -rw-r--r--. 1 root root 2143 Mar 30 15:59 harbor.192-168-1-156.nip.io.cert
+  -rw-r--r--. 1 root root 2143 Mar 30 15:56 harbor.192-168-1-156.nip.io.crt
+  -rw-r--r--. 1 root root 3243 Mar 30 15:57 harbor.192-168-1-156.nip.io.key
+  
+  /etc/docker/certs.d/harbor.ivycomtech.cloud:
+  total 12
+  -rw-r--r--. 1 root root 2049 Mar 25 17:32 ca.crt
+  -rw-r--r--. 1 root root 2126 Mar 25 17:32 harbor.ivycomtech.cloud.cert
+  -rw-r--r--. 1 root root 3243 Mar 25 17:32 harbor.ivycomtech.cloud.key
   ```
 
 - config.toml 파일 전체
