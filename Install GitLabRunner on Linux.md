@@ -97,6 +97,46 @@ Registering runner... succeeded                     runner=vqxuHk32
 Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 ```
 
+## Gitlab runner 사설 인증서 설정
+- 사설인증서 적용하려면 아래 "/etc/docker/certs.d" 폴더를 docker.runner 의 volume에 적용
+  ```bash
+  [root@runner ~]# ll /etc/docker/certs.d
+  total 0
+  drwxr-xr-x. 2 root root 138 Mar 30 15:59 harbor.192-168-1-156.nip.io
+  drwxr-xr-x. 2 root root  91 Mar 25 17:32 harbor.ivycomtech.cloud
+  ```
+
+- config.toml 파일 전체
+```bash
+vi /etc/gitlab-runner/config.toml
+
+concurrent = 1
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+[[runners]]
+  name = "My Docker Runner"
+  url = "http://gitlab.ivycomtech.cloud/"
+  token = "BCxAXNbKnyPVefjhxsXR"
+  executor = "docker"
+  [runners.custom_build_dir]
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+  [runners.docker]
+    tls_verify = false
+    image = "docker:19.03.12"
+    privileged = true
+    disable_entrypoint_overwrite = false
+    oom_kill_disable = false
+    disable_cache = false
+    volumes = ["/certs/client", "/cache", "/etc/docker/certs.d:/etc/docker/certs.d"]
+    shm_size = 0
+```
+
 ## GitLab runner command
 - 등록된 Runner 조회
   ```bash
