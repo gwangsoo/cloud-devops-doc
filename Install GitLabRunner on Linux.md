@@ -98,6 +98,8 @@ Runner registered successfully. Feel free to start it, but if it's running alrea
 ```
 
 ## Gitlab runner 사설 인증서 설정
+https://docs.gitlab.com/ce/ci/docker/using_docker_build.html
+
 - 사설인증서 적용하려면 아래 "/etc/docker/certs.d" 폴더를 docker.runner 의 volume에 적용
   ```bash
   [root@runner ~]# ll -R /etc/docker/certs.d
