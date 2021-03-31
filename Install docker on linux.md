@@ -94,8 +94,7 @@ curl https://releases.rancher.com/install-docker/17.03.2.sh | sh
 
 ### 사설 certificate 주입
 docker 는 push 할때 https 만 지원하기 때문에 사설도메인의 경우 사설certificate 를 주입해 주어야 함.
-- 주입위치
-  /etc/docker/certs.d
+- 주입위치 : /etc/docker/certs.d
 - sample
 ```bash
 [root@nodea certs.d]# ll -R
