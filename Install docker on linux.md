@@ -89,3 +89,45 @@ curl https://releases.rancher.com/install-docker/18.06.2.sh | sh
 ```bash
 curl https://releases.rancher.com/install-docker/17.03.2.sh | sh
 ```
+
+## docker push 가이드
+
+### 사설 certificate 주입
+docker 는 push 할때 https 만 지원하기 때문에 사설도메인의 경우 사설certificate 를 주입해 주어야 함.
+- 주입위치
+  /etc/docker/certs.d
+- sample
+```bash
+[root@nodea certs.d]# ll -R
+.:
+total 0
+drwxr-xr-x. 2 root root 138 Mar 30 18:12 harbor.192-168-1-156.nip.io
+
+./harbor.192-168-1-156.nip.io:
+total 16
+-rw-r--r--. 1 root root 2057 Mar 30 18:12 ca.crt
+-rw-r--r--. 1 root root 2143 Mar 30 18:12 harbor.192-168-1-156.nip.io.cert
+-rw-r--r--. 1 root root 3243 Mar 30 18:12 harbor.192-168-1-156.nip.io.key
+```
+
+### docker login
+```bash
+docker login -u ivymanager -p Ivymanager1 harbor.192-168-1-156.nip.io
+
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+```
+
+### docker push
+- docker image 에 tag 을 달고
+  ```bash
+  docker tag fbb576e9f482 harbor.ivycomtech.cloud/library/demo:latest
+  ```
+- 해당 tag 을 push 함
+  ```bash
+  docker push harbor.ivycomtech.cloud/library/demo:latest
+  ```
