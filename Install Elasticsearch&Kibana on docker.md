@@ -138,7 +138,7 @@ https://www.elastic.co/guide/en/kibana/current/docker.html
        ```
        - elasticsearch log에서 NoShardAvailableActionException 발생했을 것이다.
          - 싱글노드(마스터노드)로만 운용하면 생기는 문제이므로 멀티노드로 데이터 노드를 운용해야 함.
-         - 싱글노드로 계속 운영하는 경우 로그가 안올라 오면
+         - 정상화 방법
            - elasticsearch 재기동
              ```bash
              docker-compose restart elasticsearch
