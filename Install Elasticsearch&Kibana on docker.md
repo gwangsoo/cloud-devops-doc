@@ -127,7 +127,23 @@ https://www.elastic.co/guide/en/kibana/current/docker.html
    - https://epicarts.tistory.com/75
 
 8. 기타
-   - 로그가 elasticsearch 로 전송안되는 경우 fluentd 로그 확인
-     ```bash
-     kubectl exec -n cattle-logging-system rancher-logging-fluentd-0 -- cat /fluentd/log/out
-     ```
+   - 로그가 elasticsearch 로 전송안되는 경우
+     - fluentd 로그 확인
+       ```bash
+       kubectl exec -n cattle-logging-system rancher-logging-fluentd-0 -- cat /fluentd/log/out
+       ```
+     - elasticsearch log 확인
+       ```bash
+       docker-compose logs -f elasticsearch
+       ```
+       - elasticsearch log에서 NoShardAvailableActionException 발생했을 것이다.
+         - 싱글노드(마스터노드)로만 운용하면 생기는 문제이므로 멀티노드로 데이터 노드를 운용해야 함.
+         - 싱글노드로 계속 운영하는 경우 로그가 안올라 오면
+           - elasticsearch 재기동
+             ```bash
+             docker-compose restart elasticsearch
+             ```
+           - fluentd 스테이트풀셋 재기동
+             ```bash
+             kubectl -n cattle-logging-system rollout restart statefulset.apps/rancher-logging-fluentd
+             ```
