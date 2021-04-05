@@ -86,10 +86,13 @@ sudo gitlab-runner register
 --url https://gitlab.192-168-1-158.nip.io/ \
 --registration-token izVpdfd91fUqGZexMZvd \
 --executor docker \
---description "My Docker Runner" \
+--description "demo-runner" \
 --docker-image "docker:stable" \
 --docker-privileged \
---docker-volumes "/certs/client"
+--docker-volumes "/etc/docker/certs.d:/etc/docker/certs.d" \
+--tls-ca-file /etc/docker/certs.d/gitlab.192-168-1-158.nip.io/ca.crt \
+--tls-cert-file /etc/docker/certs.d/gitlab.192-168-1-158.nip.io/gitlab.192-168-1-158.nip.io.cert \
+--tls-key-file /etc/docker/certs.d/gitlab.192-168-1-158.nip.io/gitlab.192-168-1-158.nip.io.key
 
 Runtime platform                                    arch=amd64 os=linux pid=34430 revision=132560ae version=13.9.0~beta.142.g132560ae
 Running in system-mode.
@@ -133,9 +136,12 @@ check_interval = 0
   session_timeout = 1800
 
 [[runners]]
-  name = "My Docker Runner"
-  url = "http://gitlab.ivycomtech.cloud/"
-  token = "BCxAXNbKnyPVefjhxsXR"
+  name = "demo-runner"
+  url = "https://gitlab.192-168-1-158.nip.io/"
+  token = "4jj_WJKd7V2st-G3nZzW"
+  tls-ca-file = "/etc/docker/certs.d/gitlab.192-168-1-158.nip.io/ca.crt"
+  tls-cert-file = "/etc/docker/certs.d/gitlab.192-168-1-158.nip.io/gitlab.192-168-1-158.nip.io.cert"
+  tls-key-file = "/etc/docker/certs.d/gitlab.192-168-1-158.nip.io/gitlab.192-168-1-158.nip.io.key"
   executor = "docker"
   [runners.custom_build_dir]
   [runners.cache]
@@ -144,12 +150,12 @@ check_interval = 0
     [runners.cache.azure]
   [runners.docker]
     tls_verify = false
-    image = "docker:19.03.12"
+    image = "docker:stable"
     privileged = true
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
     disable_cache = false
-    volumes = ["/certs/client", "/cache", "/etc/docker/certs.d:/etc/docker/certs.d"]
+    volumes = ["/etc/docker/certs.d:/etc/docker/certs.d", "/certs/client", "/cache"]
     shm_size = 0
 ```
 
