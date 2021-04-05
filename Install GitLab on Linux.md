@@ -48,6 +48,7 @@ sudo yum install -y gitlab-ce
 ## 설치 후
 
 ### SSL 인증서 적용 방법
+https://docs.gitlab.com/omnibus/settings/ssl.html
 
 #### 자체인증서방법
 정식 인증서가 있는 경우 pass!!
