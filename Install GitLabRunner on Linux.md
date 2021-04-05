@@ -83,8 +83,8 @@ export GITLAB_RUNNER_DISABLE_SKEL=true; sudo -E yum install gitlab-runner
 sudo gitlab-runner register
 
 [admin@runner ~]$ sudo gitlab-runner register -n \
---url http://gitlab.ivycomtech.cloud/ \
---registration-token vqxuHk32syKByEDrQQD7 \
+--url https://gitlab.192-168-1-158.nip.io/ \
+--registration-token izVpdfd91fUqGZexMZvd \
 --executor docker \
 --description "My Docker Runner" \
 --docker-image "docker:stable" \
