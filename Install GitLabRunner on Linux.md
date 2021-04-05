@@ -150,7 +150,7 @@ check_interval = 0
     [runners.cache.azure]
   [runners.docker]
     tls_verify = false
-    image = "docker:stable"
+    image = "docker:19.03.12"
     privileged = true
     disable_entrypoint_overwrite = false
     oom_kill_disable = false
