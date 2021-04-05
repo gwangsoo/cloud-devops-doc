@@ -47,6 +47,97 @@ sudo yum install -y gitlab-ce
 
 ## 설치 후
 
+### SSL 인증서 적용 방법
+
+#### 자체인증서방법
+정식 인증서가 있는 경우 pass!!
+```bash
+cd /etc/gitlab/ssl/
+```
+
+##### 인증기관 인증서 생성
+프로덕션 환경에서는 CA로부터 인증서를 받아야합니다. 테스트 또는 개발 환경에서 자체 CA를 생성 할 수 있습니다. CA 인증서를 생성하려면 다음 명령을 실행하십시오.
+1. CA 인증서 개인 키를 생성
+   ```bash
+   openssl genrsa -out ca.key 4096
+   
+   Generating RSA private key, 4096 bit long modulus
+   .......................................................................++
+   ............................................................++
+   e is 65537 (0x10001)
+   ```
+2. CA 인증서를 생성
+   ```bash
+   openssl req -x509 -new -nodes -sha512 -days 3650 \
+   -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=gitlab.192-168-1-158.nip.io" \
+   -key ca.key \
+   -out ca.crt
+   ```
+   
+##### 서버인증서 생성
+인증서에는 일반적으로 .crt 파일과 .key 파일이 포함됩니다. (gitlab.192-168-1-158.nip.io.crt, gitlab.192-168-1-158.nip.io.key)
+
+1. 개인키 생성
+   ```bash
+   openssl genrsa -out gitlab.192-168-1-158.nip.io.key 4096
+   
+   Generating RSA private key, 4096 bit long modulus
+   .................................................................++
+   ..................................................................++
+   e is 65537 (0x10001)
+   ```
+2. CSR (인증서 서명 요청)을 생성
+   ```bash
+   openssl req -sha512 -new \
+    -subj "/C=CN/ST=Seoul/L=Seoul/O=example/OU=Personal/CN=gitlab.192-168-1-158.nip.io" \
+    -key gitlab.192-168-1-158.nip.io.key \
+    -out gitlab.192-168-1-158.nip.io.csr
+   ```
+3. x509 v3 확장 파일을 생성
+   Harbor 호스트에 연결하기 위해 FQDN 또는 IP 주소를 사용하는지 여부에 관계없이 SAN (주체 대체 이름) 및 x509 v3을 준수하는 Harbor 호스트에 대한 인증서를 생성 할 수 있도록이 파일을 만들어야합니다. 확장 요구 사항. DNS도메인을 반영 하도록 항목을 바꿉니다 .
+   ```bash
+   cat > v3.ext <<-EOF
+   authorityKeyIdentifier=keyid,issuer
+   basicConstraints=CA:FALSE
+   keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+   extendedKeyUsage = serverAuth
+   subjectAltName = @alt_names
+   
+   [alt_names]
+   DNS.1=gitlab.192-168-1-158.nip.io
+   DNS.2=gitlab.ivycomtech.cloud
+   DNS.3=gitlab
+   EOF
+   ```
+4. v3.ext파일을 사용 하여 Harbor 호스트에 대한 인증서를 생성
+   gitlab.192-168-1-158.nip.io CRS 파일을 CRT 파일 이름으로 바꿉니다.
+   ```bash
+   openssl x509 -req -sha512 -days 3650 \
+       -extfile v3.ext \
+       -CA ca.crt -CAkey ca.key -CAcreateserial \
+       -in gitlab.192-168-1-158.nip.io.csr \
+       -out gitlab.192-168-1-158.nip.io.crt
+   ```
+
+5. 생성된 인증서 파일을 복사한다.
+   CA.crt, ca.key, ca.srl,  gitlab.192-168-1-158.nip.io.crt, gitlab.192-168-1-158.nip.io.csr, gitlab.192-168-1-158.nip.io.key
+   ```bash
+   cp ca.* /etc/gitlab/ssl
+   cp gitlab.192-168-1-158.nip.io.* /etc/gitlab/ssl
+   ```
+   
+### GitLab 설정 파일 수정
+```bash
+sudo vi /etc/gitlab/gitlab.rb
+
+external_url 'https://gitlab.192-168-1-158.nip.io'
+nginx['redirect_http_to_https'] = true
+nginx['ssl_client_certificate'] = "/etc/gitlab/ssl/ca.crt"
+letsencrypt['enable'] = false
+
+sudo gitlab-ctl reconfigure
+```
+
 ### 설정변경
 Please configure a URL for your GitLab instance by setting `external_url`
 configuration in /etc/gitlab/gitlab.rb file.
@@ -144,10 +235,10 @@ build:
 package:
   stage: package
   script:
-    - docker login -u ivymanager -p $HARBOR_PASSWORD harbor.192-168-1-156.nip.io
-    - docker build --cache-from harbor.192-168-1-156.nip.io/library/demo:latest --tag harbor.192-168-1-156.nip.io/library/demo:$CI_COMMIT_SHA --tag harbor.192-168-1-156.nip.io/library/demo:latest .
-    - docker push harbor.192-168-1-156.nip.io/library/demo:$CI_COMMIT_SHA
-    - docker push harbor.192-168-1-156.nip.io/library/demo:latest
+    - docker login -u ivymanager -p $HARBOR_PASSWORD gitlab.192-168-1-158.nip.io
+    - docker build --cache-from gitlab.192-168-1-158.nip.io/library/demo:latest --tag gitlab.192-168-1-158.nip.io/library/demo:$CI_COMMIT_SHA --tag gitlab.192-168-1-158.nip.io/library/demo:latest .
+    - docker push gitlab.192-168-1-158.nip.io/library/demo:$CI_COMMIT_SHA
+    - docker push gitlab.192-168-1-158.nip.io/library/demo:latest
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
