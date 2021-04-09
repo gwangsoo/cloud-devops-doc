@@ -39,7 +39,7 @@ sudo hostnamectl set-hostname rancher.ivycomtech.cloud
 
 ## 사설 CA root
 - ca root 를 하나 만들고 공유해서 사용하려 했으니 귀찮아서 그냥 함. 필요시 ca root 를 그때 그때 만들어서 사용했음.
-ivycomtech.cloud CA Root Certificate
+- ivycomtech.cloud CA Root Certificate
 
 ## Rancher 설치 순서
 - 여러가지 방법이 있으나 K8s cluster 구성 후 Helm 으로 설치하세요. 
