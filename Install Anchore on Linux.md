@@ -58,3 +58,30 @@
      ...
      Feed sync: Success.
      ```
+
+3. Anchore CLI 설정
+   https://engine.anchore.io/docs/install/anchore_cli/
+   - Installing Anchore CLI on CentOS and Red Hat Enterprise Linux
+   ```bash
+   sudo yum install -y epel-release
+   sudo yum install -y python-pip
+   pip install --user --upgrade anchorecli
+   ```
+   - path 설정
+     - path 확인
+     ```bash
+     python -m site --user-base
+     /root/.local
+     ```
+     - Credentials File 사용 (recommended)
+     ```bash
+     mkdir $HOME/.anchore
+     cd $HOME/.anchore
+     cat <<EOF > credentials.yaml
+     default:
+             ANCHORE_CLI_USER: 'admin'
+             ANCHORE_CLI_PASS: 'foobar'
+             ANCHORE_CLI_URL: 'http://localhost:8228/v1'
+     EOF
+     ```
+     https://engine.anchore.io/docs/install/anchore_cli/cli_config/
