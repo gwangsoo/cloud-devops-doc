@@ -1,4 +1,4 @@
-# Install Anchore on Kubernetes
+# Install Anchore on Linux
 - Docker Image의 취약점을 분석하고 조치하기 위한 open source
 - https://engine.anchore.io/docs/quickstart/
 
