@@ -13,6 +13,7 @@ cloud 관련 설치 가이드 및 CI/CD 환경 구성 가이드
 - 192.168.1.164 kubernetes node d (worker)
 - 192.168.1.181 kubernetes node e (worker)
 - 192.168.1.182 elasticsearch + kibana
+- 192.168.1.147 anchore
 
 ## host 등록
 - xip.io 또는 nip.io 를 사용해서 host 등록하는게 편함 굳이 hosts 를 등록하지 않아도 되니까.
