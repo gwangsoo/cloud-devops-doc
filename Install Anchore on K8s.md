@@ -1,5 +1,6 @@
 # Install Sonarqube on Kubernetes
-https://engine.anchore.io/docs/quickstart/
+- Docker Image의 취약점을 분석하고 조치하기 위한 open source
+- https://engine.anchore.io/docs/quickstart/
 
 ## 설치준비
 - docker 설치
